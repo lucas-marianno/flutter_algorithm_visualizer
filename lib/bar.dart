@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+enum BarState { unselected, selected, onChange }
+
+// ignore: must_be_immutable
 class Bar extends StatefulWidget {
   Bar(this.value, {this.selected = false, super.key});
   final int value;
@@ -12,11 +15,12 @@ class Bar extends StatefulWidget {
 class _BarState extends State<Bar> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: widget.selected ? Colors.amber : Colors.blue,
-      height: widget.value.toDouble(),
-      width: 10,
-      margin: const EdgeInsets.symmetric(horizontal: 5),
+    return Expanded(
+      child: Container(
+        color: widget.selected ? Colors.amber : Colors.blue,
+        height: widget.value.toDouble(),
+        margin: const EdgeInsets.symmetric(horizontal: 1),
+      ),
     );
   }
 }

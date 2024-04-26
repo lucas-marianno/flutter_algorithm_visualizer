@@ -10,13 +10,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const HomePage(),
+      home: HomePage(),
     );
   }
 }
@@ -29,31 +25,32 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Bar> bars = [];
-  List<Bar> barsSorted = [];
-  int multiplier = 10;
-  Duration animationInterval = const Duration(milliseconds: 50);
+  final int nOfBars = 10;
+  final Duration animationInterval = const Duration(milliseconds: 1);
+  final int barHeight = 400;
 
-  void populate(int nOfBars) {
-    for (int i = 0; i < nOfBars; i++) {
+  bool stopSort = false;
+  List<Bar> bars = [];
+  int multiplier = 1;
+
+  void populate(int quantity) {
+    for (int i = 1; i <= quantity; i++) {
       bars.add(Bar(i * multiplier));
     }
-    barsSorted = bars;
   }
 
   void randomize() {
-    print('randomize click');
     setState(() => bars.shuffle());
   }
 
-  void bubbleSort(int steps) async {
-    print(steps);
-    if (steps <= 0) return;
+  void stop() {
+    setState(() {
+      stopSort = true;
+    });
+  }
 
-    //for each item in list
-    //compare with next item's value
-    //if next items value is smaller thant current value, switch places
-    //go to next item
+  void bubbleSort(int steps) async {
+    if (steps <= 1 || stopSort) return;
 
     for (int i = 0; i < steps - 1; i++) {
       bars[i] = Bar(bars[i].value, selected: true);
@@ -70,13 +67,13 @@ class _HomePageState extends State<HomePage> {
       bars[i + 1] = Bar(bars[i + 1].value);
       setState(() {});
     }
-    steps--;
-    bubbleSort(steps);
+    bubbleSort(steps - 1);
   }
 
   @override
   void initState() {
-    populate(30);
+    multiplier = barHeight ~/ nOfBars;
+    populate(nOfBars);
     super.initState();
   }
 
@@ -84,26 +81,45 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("algorithms")),
-      body: Column(
-        children: [
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: bars,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: bars,
+              ),
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(onPressed: randomize, child: const Text('randomize')),
-                ElevatedButton(onPressed: () => bubbleSort(bars.length), child: const Text('sort')),
-              ],
-            ),
-          )
-        ],
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(onPressed: randomize, child: const Text('randomize')),
+                      ElevatedButton(onPressed: stop, child: const Text('stop'))
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          stopSort = false;
+                          bubbleSort(bars.length);
+                        },
+                        child: const Text('bubble sort'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

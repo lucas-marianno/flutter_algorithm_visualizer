@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 
-enum BarState { unselected, selected, onChange }
-
-// ignore: must_be_immutable
 class Bar extends StatefulWidget {
-  Bar(this.value, {this.selected = false, super.key});
+  const Bar(this.value, {this.selected = false, super.key});
   final int value;
-  bool selected;
+  final bool selected;
 
   @override
   State<Bar> createState() => _BarState();

@@ -1,4 +1,7 @@
 import 'package:algorithm_visualizer/bar.dart';
+import 'package:algorithm_visualizer/widgets/buttom.dart';
+import 'package:algorithm_visualizer/widgets/custom_slider.dart';
+import 'package:algorithm_visualizer/logic.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -34,16 +37,6 @@ class _HomePageState extends State<HomePage> {
   List<Bar> bars = [];
   double multiplier = 1;
 
-  void populate(int quantity) {
-    bars.clear();
-
-    multiplier = barHeight / nOfBars;
-
-    for (int i = 1; i <= quantity; i++) {
-      bars.add(Bar((i * multiplier).toInt()));
-    }
-  }
-
   void randomize() {
     setState(() => bars.shuffle());
   }
@@ -68,7 +61,7 @@ class _HomePageState extends State<HomePage> {
         bars[i + 1] = tempBar;
       }
 
-      await Future.delayed(animationInterval);
+      await delay(sortingSpeed, stopSort);
       bars[i] = Bar(bars[i].value);
       bars[i + 1] = Bar(bars[i + 1].value);
     }
@@ -76,22 +69,9 @@ class _HomePageState extends State<HomePage> {
     bubbleSort(steps - 1, isSorted: isSorted);
   }
 
-  String sortingSpeedLabel() {
-    switch (sortingSpeed) {
-      case 1:
-        return 'slow af';
-      case 2:
-        return 'slow';
-      case 3:
-        return 'fast';
-      default:
-        return 'instant';
-    }
-  }
-
   @override
   void initState() {
-    populate(nOfBars);
+    bars = populate(barHeight, nOfBars);
     super.initState();
   }
 
@@ -112,27 +92,30 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  const Divider(height: 50),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Slider(
+                      MySlider(
+                        title: 'Quantity',
                         label: nOfBars.toString(),
                         value: nOfBars.toDouble(),
-                        divisions: 100,
                         min: 2,
                         max: 100,
+                        divisions: 100,
                         onChanged: (value) {
-                          stopSort = true;
-                          setState(() {});
+                          stop();
                           nOfBars = value.toInt();
-                          populate(nOfBars);
+                          bars = populate(barHeight, nOfBars);
                           setState(() {});
                         },
                       ),
-                      Slider(
+                      MySlider(
+                        title: 'Sorting Speed',
                         value: sortingSpeed.toDouble(),
-                        label: sortingSpeedLabel(),
+                        label: sortingSpeedLabel(sortingSpeed),
                         min: 1,
                         max: 4,
                         divisions: 3,
@@ -144,23 +127,48 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      ElevatedButton(onPressed: randomize, child: const Text('randomize')),
-                      ElevatedButton(onPressed: stop, child: const Text('stop'))
+                      MyButton(title: 'Randomize', onTap: randomize),
+                      MyButton(title: 'Stop', onTap: stop),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          stopSort = false;
-                          bubbleSort(bars.length);
-                        },
-                        child: const Text('bubble sort'),
-                      ),
-                    ],
+                  const SizedBox(height: 25),
+                  Expanded(
+                    child: GridView.count(
+                      crossAxisCount: 4,
+                      children: [
+                        MyButton(
+                          title: 'Bubble Sort',
+                          onTap: () {
+                            stopSort = false;
+                            bubbleSort(bars.length);
+                          },
+                        ),
+                        MyButton(
+                          title: 'Merge Sort',
+                          onTap: () {
+                            stopSort = false;
+                            //TODO:
+                          },
+                        ),
+                        MyButton(
+                          title: 'Pogo Sort',
+                          onTap: () {
+                            stopSort = false;
+                            //TODO:
+                          },
+                        ),
+                        MyButton(
+                          title: 'IDK Sort',
+                          onTap: () {
+                            stopSort = false;
+                            //TODO:
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

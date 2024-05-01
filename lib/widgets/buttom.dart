@@ -11,7 +11,7 @@ class MyButton extends StatelessWidget {
     return MyBordedContainer(
       child: TextButton(
         onPressed: onTap,
-        child: const Text('IDK sort'),
+        child: Text(title),
       ),
     );
   }

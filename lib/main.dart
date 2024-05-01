@@ -94,7 +94,8 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Divider(height: 50),
+                  const SizedBox(height: 5),
+                  const Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -134,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                       MyButton(title: 'Stop', onTap: stop),
                     ],
                   ),
-                  const SizedBox(height: 25),
+                  const Divider(),
                   Expanded(
                     child: GridView.count(
                       crossAxisCount: 4,
@@ -147,6 +148,27 @@ class _HomePageState extends State<HomePage> {
                           },
                         ),
                         MyButton(
+                          title: 'Selection Sort',
+                          onTap: () {
+                            stopSort = false;
+                            //TODO:
+                          },
+                        ),
+                        MyButton(
+                          title: 'Insertion Sort',
+                          onTap: () {
+                            stopSort = false;
+                            //TODO:
+                          },
+                        ),
+                        MyButton(
+                          title: 'Quick Sort',
+                          onTap: () {
+                            stopSort = false;
+                            //TODO:
+                          },
+                        ),
+                        MyButton(
                           title: 'Merge Sort',
                           onTap: () {
                             stopSort = false;
@@ -154,14 +176,49 @@ class _HomePageState extends State<HomePage> {
                           },
                         ),
                         MyButton(
-                          title: 'Pogo Sort',
+                          title: 'Heap Sort',
                           onTap: () {
                             stopSort = false;
                             //TODO:
                           },
                         ),
                         MyButton(
-                          title: 'IDK Sort',
+                          title: 'Radix sort',
+                          onTap: () {
+                            stopSort = false;
+                            //TODO:
+                          },
+                        ),
+                        MyButton(
+                          title: 'Shell Sort',
+                          onTap: () {
+                            stopSort = false;
+                            //TODO:
+                          },
+                        ),
+                        MyButton(
+                          title: 'Cocktail shaker Sort',
+                          onTap: () {
+                            stopSort = false;
+                            //TODO:
+                          },
+                        ),
+                        MyButton(
+                          title: 'Gnome Sort',
+                          onTap: () {
+                            stopSort = false;
+                            //TODO:
+                          },
+                        ),
+                        MyButton(
+                          title: 'Bitonic Sort',
+                          onTap: () {
+                            stopSort = false;
+                            //TODO:
+                          },
+                        ),
+                        MyButton(
+                          title: 'Bogo Sort',
                           onTap: () {
                             stopSort = false;
                             //TODO:

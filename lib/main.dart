@@ -47,13 +47,26 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void selectBars(List<int> indexes) {
+    for (int index in indexes) {
+      bars[index] = Bar(bars[index].value, selected: true);
+    }
+    setState(() {});
+  }
+
+  void unSelectBars(List<int> indexes) {
+    for (int index in indexes) {
+      bars[index] = Bar(bars[index].value);
+    }
+    setState(() {});
+  }
+
   Future<void> bubbleSort(int steps, {bool isSorted = false}) async {
     if (steps <= 1 || stopSort || isSorted) return;
     isSorted = true;
     for (int i = 0; i < steps - 1; i++) {
-      bars[i] = Bar(bars[i].value, selected: true);
-      bars[i + 1] = Bar(bars[i + 1].value, selected: true);
-      setState(() {});
+      selectBars([i, i + 1]);
+
       if (bars[i].value > bars[i + 1].value) {
         isSorted = false;
         final Bar tempBar = bars[i];
@@ -62,11 +75,48 @@ class _HomePageState extends State<HomePage> {
       }
 
       await delay(sortingSpeed, stopSort);
-      bars[i] = Bar(bars[i].value);
-      bars[i + 1] = Bar(bars[i + 1].value);
+      unSelectBars([i, i + 1]);
     }
-    setState(() {});
     bubbleSort(steps - 1, isSorted: isSorted);
+  }
+
+  Future<List<Bar>> mergeSort(List<Bar> barsList, int startIndex, int endIndex) async {
+    if (barsList.length == 1) return barsList;
+
+    selectBars(List.generate(endIndex - startIndex, (index) => startIndex + index));
+
+    List<Bar> left = barsList.sublist(0, barsList.length ~/ 2);
+    List<Bar> right = barsList.sublist(barsList.length ~/ 2);
+    left = await mergeSort(left, 0, barsList.length ~/ 2);
+    right = await mergeSort(right, barsList.length ~/ 2, barsList.length);
+
+    //merge part
+    List<Bar> merged = [];
+    while (left.isNotEmpty && right.isNotEmpty) {
+      if (left[0].value < right[0].value) {
+        merged.add(left[0]);
+        left.removeAt(0);
+      } else {
+        merged.add(right[0]);
+        right.removeAt(0);
+      }
+      await delay(sortingSpeed, stopSort);
+      setState(() {
+        bars.replaceRange(startIndex, endIndex, merged + left + right);
+      });
+    }
+
+    while (left.isNotEmpty) {
+      merged.add(left[0]);
+      left.removeAt(0);
+    }
+    while (right.isNotEmpty) {
+      merged.add(right[0]);
+      right.removeAt(0);
+    }
+    await delay(sortingSpeed, stopSort);
+
+    return merged;
   }
 
   @override
@@ -172,7 +222,7 @@ class _HomePageState extends State<HomePage> {
                           title: 'Merge Sort',
                           onTap: () {
                             stopSort = false;
-                            //TODO:
+                            mergeSort(bars, 0, bars.length);
                           },
                         ),
                         MyButton(

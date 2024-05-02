@@ -82,8 +82,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<List<Bar>> mergeSort(List<Bar> barsList, int startIndex, int endIndex) async {
     if (barsList.length == 1) return barsList;
-
-    selectBars(List.generate(endIndex - startIndex, (index) => startIndex + index));
+    print('from $startIndex to $endIndex');
 
     List<Bar> left = barsList.sublist(0, barsList.length ~/ 2);
     List<Bar> right = barsList.sublist(barsList.length ~/ 2);
@@ -93,6 +92,9 @@ class _HomePageState extends State<HomePage> {
     //merge part
     List<Bar> merged = [];
     while (left.isNotEmpty && right.isNotEmpty) {
+      final tempA = merged.length;
+      final tempB = merged.length + left.length;
+      selectBars([tempA, tempB]);
       if (left[0].value < right[0].value) {
         merged.add(left[0]);
         left.removeAt(0);
@@ -101,18 +103,23 @@ class _HomePageState extends State<HomePage> {
         right.removeAt(0);
       }
       await delay(sortingSpeed, stopSort);
+      unSelectBars([tempA, tempB]);
       setState(() {
         bars.replaceRange(startIndex, endIndex, merged + left + right);
       });
     }
-
+    // unSelectBars([startIndex, endIndex]);
     while (left.isNotEmpty) {
+      selectBars([merged.length]);
       merged.add(left[0]);
       left.removeAt(0);
+      selectBars([merged.length - 1]);
     }
     while (right.isNotEmpty) {
+      selectBars([merged.length]);
       merged.add(right[0]);
       right.removeAt(0);
+      selectBars([merged.length - 1]);
     }
     await delay(sortingSpeed, stopSort);
 

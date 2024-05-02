@@ -22,19 +22,21 @@ class MySlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MyBordedContainer(
-      child: Column(
-        children: [
-          Text(title),
-          Slider(
-            label: label,
-            value: value,
-            min: min,
-            max: max,
-            divisions: divisions,
-            onChanged: onChanged,
-          ),
-        ],
+    return Expanded(
+      child: MyBordedContainer(
+        child: Column(
+          children: [
+            Text(title),
+            Slider(
+              label: label,
+              value: value,
+              min: min,
+              max: max,
+              divisions: divisions,
+              onChanged: onChanged,
+            ),
+          ],
+        ),
       ),
     );
   }

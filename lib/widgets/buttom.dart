@@ -11,7 +11,7 @@ class MyButton extends StatelessWidget {
     return MyBordedContainer(
       child: TextButton(
         onPressed: onTap,
-        child: Text(title),
+        child: Text(title, textAlign: TextAlign.center),
       ),
     );
   }

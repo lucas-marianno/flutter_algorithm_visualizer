@@ -1,9 +1,7 @@
-import 'package:algorithm_visualizer/logic/sorting_algorithms/bubble_sort.dart';
-import 'package:algorithm_visualizer/logic/sorting_algorithms/merge_sort.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:algorithm_visualizer/widgets/buttom.dart';
 import 'package:algorithm_visualizer/widgets/custom_slider.dart';
-import 'package:algorithm_visualizer/logic/logic.dart';
+import 'package:algorithm_visualizer/logic/sorting_speed_controller.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -30,27 +28,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final SortingSpeed sortingSpeed = SortingSpeed();
-  final Duration animationInterval = const Duration(microseconds: 1);
+  late final SortingController sortingController;
   final int barHeight = 400;
   int nOfBars = 100;
-  String sortAlgorithm = 'bubble sort';
-  bool stopSort = false;
+  // bool stopSort = true;
   List<Bar> bars = [];
 
   void selectAlgorithm(String algo) {
     setState(() {
-      sortAlgorithm = algo;
+      sortingController.setAlgorithm = algo;
     });
   }
 
-  void randomize() {
-    stopSorting();
-    setState(() => bars.shuffle());
-  }
-
   List<Bar> populate(int barHeight, int nOfBars) {
-    stopSorting();
+    sortingController.stopSorting();
     bars.clear();
 
     double multiplier = barHeight / nOfBars;
@@ -61,17 +52,9 @@ class _HomePageState extends State<HomePage> {
     return bars;
   }
 
-  void stopSorting() {
-    setState(() {
-      stopSort = true;
-      // sortingSpeed.setSpeed = Speed.instant;
-    });
-  }
-
   Future<void> updateBarsGraph(List<Bar> newBars) async {
-    if (stopSort) return;
+    // if (stopSort) return;
 
-    await sortingSpeed.delay();
     setState(() {
       bars = newBars;
     });
@@ -79,6 +62,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    sortingController = SortingController(
+      bars: bars,
+      updateBarsCallback: updateBarsGraph,
+      setStateCallback: setState,
+    );
+
     bars = populate(barHeight, nOfBars);
     super.initState();
   }
@@ -96,16 +85,17 @@ class _HomePageState extends State<HomePage> {
               child: Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
-                  const Positioned(
+                  Positioned(
                     top: 0,
                     left: 0,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Bozo Sort'),
-                        Text('n array access'),
-                        Text('n calculations'),
-                        Text('n ms delay')
+                        Text(sortingController.algorithm),
+                        // TODO: feature
+                        const Text('n array access'),
+                        const Text('n calculations'),
+                        const Text('n ms delay')
                       ],
                     ),
                   ),
@@ -133,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                         max: 100,
                         divisions: 100,
                         onChanged: (value) {
-                          stopSorting();
+                          sortingController.stopSorting();
                           nOfBars = value.toInt();
                           bars = populate(barHeight, nOfBars);
                           setState(() {});
@@ -141,13 +131,13 @@ class _HomePageState extends State<HomePage> {
                       ),
                       MySlider(
                         title: 'Sorting Speed',
-                        value: sortingSpeed.value(),
-                        label: sortingSpeed.label(),
+                        value: sortingController.speedValue,
+                        label: sortingController.speedLabel,
                         min: 1,
                         max: 4,
                         divisions: 3,
                         onChanged: (speed) {
-                          sortingSpeed.setSpeedFromValue = speed.toInt();
+                          sortingController.setSpeedFromValue = speed.toInt();
                           setState(() {});
                         },
                       )
@@ -157,9 +147,18 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Expanded(child: MyButton(title: 'Randomize', onTap: randomize)),
                       Expanded(
-                        child: MyButton(title: 'Stop', onTap: stopSorting),
+                          child: MyButton(
+                              title: 'Randomize', onTap: (_) => sortingController.randomize())),
+                      Expanded(
+                        child: MyButton(
+                          title: sortingController.hasStopped ? 'Start' : 'Stop',
+                          onTap: (_) {
+                            sortingController.hasStopped
+                                ? sortingController.startSorting()
+                                : sortingController.stopSorting();
+                          },
+                        ),
                       ),
                     ],
                   ),
@@ -170,25 +169,15 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         MyButton(
                           title: 'Bubble Sort',
-                          selectedAlgorithm: sortAlgorithm,
-                          onTap: () => selectAlgorithm('bubble sort'),
-                          // () {
-                          //   // stopSorting();
-                          //   stopSort = false;
-                          //   bubble(bars, updateBarsGraph);
-                          // },
+                          selectedAlgorithm: sortingController.algorithm,
+                          onTap: selectAlgorithm,
                         ),
                         MyButton(
                           title: 'Merge Sort',
-                          selectedAlgorithm: sortAlgorithm,
-                          onTap: () => selectAlgorithm('merge sort'),
-                          // () {
-                          //   // stopSorting();
-                          //   stopSort = false;
-                          //   merge(bars, updateBarsGraph);
-                          // },
+                          selectedAlgorithm: sortingController.algorithm,
+                          onTap: selectAlgorithm,
                         ),
-                        MyButton(title: 'Selection Sort', onTap: () {}),
+                        MyButton(title: 'Selection Sort', onTap: (_) {}),
                         const MyButton(title: 'Insertion Sort', onTap: null),
                         const MyButton(title: 'Quick Sort', onTap: null),
                         const MyButton(title: 'Heap Sort', onTap: null),

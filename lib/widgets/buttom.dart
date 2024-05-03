@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class MyButton extends StatelessWidget {
   const MyButton({required this.title, required this.onTap, this.selectedAlgorithm, super.key});
   final String title;
-  final void Function()? onTap;
+  final void Function(String btnTitle)? onTap;
   final String? selectedAlgorithm;
 
   @override
@@ -13,7 +13,7 @@ class MyButton extends StatelessWidget {
     return MyBordedContainer(
       color: selected ? Colors.grey : null,
       child: TextButton(
-        onPressed: onTap,
+        onPressed: () => onTap?.call(title),
         child: Text(title, textAlign: TextAlign.center),
       ),
     );

@@ -1,16 +1,21 @@
-# algorithm_visualizer
+# Algorithm Visualizer
 
-A new Flutter project.
+Visualize the most common sorting algorithms in a friendly way.
 
-## Getting Started
+With smooth graphics and animations!
 
-This project is a starting point for a Flutter application.
+### Algorithms available:
 
-A few resources to get you started if this is your first Flutter project:
+- [x] Bubble Sort
+- [x] Merge Sort
+- [x] Selection Sort
+- [ ] Insertion Sort
+- [ ] Quick Sort
+- [ ] Heap Sort
+- [ ] Radix Sort
+- [ ] Shell Sort
+- [ ] Cocktail Shaker Sort
+- [ ] Gnome Sort
+- [ ] Bitonic Sort
+- [ ] Bogo Sort
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.

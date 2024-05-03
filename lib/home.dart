@@ -15,7 +15,6 @@ class _HomePageState extends State<HomePage> {
   late final SortingController sortingController;
   final int barHeight = 400;
   int nOfBars = 100;
-  // bool stopSort = true;
   List<Bar> bars = [];
 
   void selectAlgorithm(String algo) {
@@ -37,8 +36,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> updateBarsGraph(List<Bar> newBars) async {
-    // if (stopSort) return;
-
     setState(() {
       bars = newBars;
     });
@@ -49,7 +46,6 @@ class _HomePageState extends State<HomePage> {
     sortingController = SortingController(
       bars: bars,
       updateBarsCallback: updateBarsGraph,
-      setStateCallback: setState,
     );
 
     bars = populate(barHeight, nOfBars);
@@ -136,9 +132,9 @@ class _HomePageState extends State<HomePage> {
                               title: 'Randomize', onTap: (_) => sortingController.randomize())),
                       Expanded(
                         child: MyButton(
-                          title: sortingController.hasStopped ? 'Start' : 'Stop',
+                          title: SortingControllerState().hasStopped ? 'Start' : 'Stop',
                           onTap: (_) {
-                            sortingController.hasStopped
+                            SortingControllerState().hasStopped
                                 ? sortingController.startSorting()
                                 : sortingController.stopSorting();
                           },

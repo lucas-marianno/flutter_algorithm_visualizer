@@ -1,19 +1,32 @@
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bubble_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/merge_sort.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
+import 'package:flutter/material.dart';
+
+class SortingControllerState extends ChangeNotifier {
+  static final SortingControllerState _instance = SortingControllerState._internal();
+  SortingControllerState._internal();
+  factory SortingControllerState() => _instance;
+
+  bool _stopSorting = false;
+
+  set stopSorting(bool stopSorting) {
+    _stopSorting = stopSorting;
+    notifyListeners();
+  }
+
+  bool get hasStopped => _stopSorting;
+}
 
 class SortingController {
   SortingController({
     required this.bars,
     required this.updateBarsCallback,
-    required this.setStateCallback,
   });
   final List<Bar> bars;
   final Future<void> Function(List<Bar> newBar) updateBarsCallback;
-  final void Function(void Function() setState) setStateCallback;
 
   int _speed = 3;
-  bool _stopSorting = false;
   String _algo = 'bubble sort';
 
   Future<void> _updateBarsGraph(List<Bar> newBar) async {
@@ -30,8 +43,7 @@ class SortingController {
   void startSorting() {
     stopSorting();
 
-    _stopSorting = false;
-    setStateCallback(() {});
+    SortingControllerState().stopSorting = false;
 
     switch (_algo.toLowerCase()) {
       case 'bubble sort':
@@ -43,8 +55,7 @@ class SortingController {
   }
 
   void stopSorting() {
-    _stopSorting = true;
-    setStateCallback(() {});
+    SortingControllerState().stopSorting = true;
     //TODO: use provider to manage state and stop the sorting algorithm at once
   }
 
@@ -86,7 +97,7 @@ class SortingController {
 
   double get speedValue => _speed.toDouble();
 
-  bool get hasStopped => _stopSorting;
+  // bool get hasStopped => _stopSorting;
 
   set setAlgorithm(String algo) => _algo = algo;
 

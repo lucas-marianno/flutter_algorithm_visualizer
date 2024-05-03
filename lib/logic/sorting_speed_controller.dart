@@ -1,5 +1,6 @@
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bubble_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/merge_sort.dart';
+import 'package:algorithm_visualizer/logic/sorting_algorithms/selection_sort.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +32,7 @@ class SortingController {
 
   Future<void> _updateBarsGraph(List<Bar> newBar) async {
     await sleep();
-    updateBarsCallback(bars);
+    updateBarsCallback(newBar);
   }
 
   void randomize() {
@@ -50,6 +51,8 @@ class SortingController {
         bubble(bars, _updateBarsGraph);
       case 'merge sort':
         merge(bars, _updateBarsGraph);
+      case 'selection sort':
+        selectionSort(bars, _updateBarsGraph);
       default:
     }
   }

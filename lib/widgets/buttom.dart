@@ -11,10 +11,14 @@ class MyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool selected = selectedAlgorithm?.toLowerCase() == title.toLowerCase();
     return MyBordedContainer(
-      color: selected ? Colors.grey : null,
+      color: selected ? Colors.deepPurple : null,
       child: TextButton(
         onPressed: () => onTap?.call(title),
-        child: Text(title, textAlign: TextAlign.center),
+        child: Text(
+          title,
+          style: TextStyle(color: selected ? Colors.white : null),
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:algorithm_visualizer/logic/sorting_speed_controller.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
@@ -27,6 +28,7 @@ Future<void> merge(List<Bar> bars, Future<void> Function(List<Bar> newBars) upda
   Future<List<Bar>> mergeSort(List<Bar> barsList, int startIndex, int endIndex) async {
     //logic
     if (barsList.length == 1) return barsList;
+    if (SortingControllerState().hasStopped == true) return barsList;
 
     //breaks the function if the array is already sorted
     for (int i = 0; i < barsList.length - 1; i++) {
@@ -55,6 +57,7 @@ Future<void> merge(List<Bar> bars, Future<void> Function(List<Bar> newBars) upda
     //merge part
     while (left.isNotEmpty && right.isNotEmpty) {
       //graphics
+      if (SortingControllerState().hasStopped == true) break;
       left[0] = Bar(left[0].value, color: Colors.amber);
       right[0] = Bar(right[0].value, color: Colors.amber);
       await update(startIndex, endIndex, merged, left, right);

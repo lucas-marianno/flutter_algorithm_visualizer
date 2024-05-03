@@ -30,14 +30,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int nOfBars = 100;
-  SortingSpeed sortingSpeed = SortingSpeed();
+  final SortingSpeed sortingSpeed = SortingSpeed();
   final Duration animationInterval = const Duration(microseconds: 1);
   final int barHeight = 400;
-
+  int nOfBars = 100;
+  String sortAlgorithm = 'bubble sort';
   bool stopSort = false;
   List<Bar> bars = [];
-  double multiplier = 1;
+
+  void selectAlgorithm(String algo) {
+    setState(() {
+      sortAlgorithm = algo;
+    });
+  }
 
   void randomize() {
     stopSorting();
@@ -88,9 +93,27 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: bars,
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  const Positioned(
+                    top: 0,
+                    left: 0,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Bozo Sort'),
+                        Text('n array access'),
+                        Text('n calculations'),
+                        Text('n ms delay')
+                      ],
+                    ),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: bars,
+                  ),
+                ],
               ),
             ),
             Expanded(
@@ -147,90 +170,34 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         MyButton(
                           title: 'Bubble Sort',
-                          onTap: () {
-                            // stopSorting();
-                            stopSort = false;
-                            bubble(bars, updateBarsGraph);
-                          },
+                          selectedAlgorithm: sortAlgorithm,
+                          onTap: () => selectAlgorithm('bubble sort'),
+                          // () {
+                          //   // stopSorting();
+                          //   stopSort = false;
+                          //   bubble(bars, updateBarsGraph);
+                          // },
                         ),
                         MyButton(
                           title: 'Merge Sort',
-                          onTap: () {
-                            // stopSorting();
-                            stopSort = false;
-                            merge(bars, updateBarsGraph);
-                          },
+                          selectedAlgorithm: sortAlgorithm,
+                          onTap: () => selectAlgorithm('merge sort'),
+                          // () {
+                          //   // stopSorting();
+                          //   stopSort = false;
+                          //   merge(bars, updateBarsGraph);
+                          // },
                         ),
-                        MyButton(
-                          title: 'Selection Sort',
-                          onTap: () {
-                            stopSorting();
-                            //TODO:
-                          },
-                        ),
-                        MyButton(
-                          title: 'Insertion Sort',
-                          onTap: () {
-                            stopSorting();
-                            //TODO:
-                          },
-                        ),
-                        MyButton(
-                          title: 'Quick Sort',
-                          onTap: () {
-                            stopSorting();
-                            //TODO:
-                          },
-                        ),
-                        MyButton(
-                          title: 'Heap Sort',
-                          onTap: () {
-                            stopSorting();
-                            //TODO:
-                          },
-                        ),
-                        MyButton(
-                          title: 'Radix sort',
-                          onTap: () {
-                            stopSorting();
-                            //TODO:
-                          },
-                        ),
-                        MyButton(
-                          title: 'Shell Sort',
-                          onTap: () {
-                            stopSorting();
-                            //TODO:
-                          },
-                        ),
-                        MyButton(
-                          title: 'Cocktail shaker Sort',
-                          onTap: () {
-                            stopSorting();
-                            //TODO:
-                          },
-                        ),
-                        MyButton(
-                          title: 'Gnome Sort',
-                          onTap: () {
-                            stopSorting();
-                            //TODO:
-                          },
-                        ),
-                        MyButton(
-                          title: 'Bitonic Sort',
-                          onTap: () {
-                            stopSorting();
-                            //TODO:
-                          },
-                        ),
-                        MyButton(
-                          title: 'Bogo Sort',
-                          onTap: () {
-                            stopSorting();
-                            //TODO:
-                          },
-                        ),
+                        MyButton(title: 'Selection Sort', onTap: () {}),
+                        const MyButton(title: 'Insertion Sort', onTap: null),
+                        const MyButton(title: 'Quick Sort', onTap: null),
+                        const MyButton(title: 'Heap Sort', onTap: null),
+                        const MyButton(title: 'Radix sort', onTap: null),
+                        const MyButton(title: 'Shell Sort', onTap: null),
+                        const MyButton(title: 'Cocktail shaker Sort', onTap: null),
+                        const MyButton(title: 'Gnome Sort', onTap: null),
+                        const MyButton(title: 'Bitonic Sort', onTap: null),
+                        const MyButton(title: 'Bogo Sort', onTap: null),
                       ],
                     ),
                   ),

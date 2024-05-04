@@ -11,10 +11,9 @@ Future<void> selectionSort(
     await updateBarsGraph(bars);
   }
 
-  bool isSorted = true;
-
   for (int sorted = 0; sorted < bars.length; sorted++) {
     int indexOfSmallest = sorted;
+    bool isSorted = true;
 
     await update(indexOfSmallest, color: Colors.red);
 
@@ -22,8 +21,11 @@ Future<void> selectionSort(
       if (SortingControllerState().hasStopped) return;
       await update(i, color: Colors.amber);
 
-      if (bars[i].value < bars[indexOfSmallest].value) {
+      if (bars[i].value > bars[i - 1].value) {
         isSorted = false;
+      }
+
+      if (bars[i].value < bars[indexOfSmallest].value) {
         update(indexOfSmallest);
         update(i, color: Colors.red);
 
@@ -31,7 +33,7 @@ Future<void> selectionSort(
       } else {
         update(i);
       }
-      if (i == bars.length - 1 && isSorted) return;
+      if (i == bars.length && isSorted) return;
     }
     Bar temp = bars[sorted];
     bars[sorted] = bars[indexOfSmallest];

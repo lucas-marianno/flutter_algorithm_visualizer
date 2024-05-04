@@ -26,16 +26,23 @@ Future<void> merge(List<Bar> bars, Future<void> Function(List<Bar> newBars) upda
     await updateBarsGraph(bars);
   }
 
+  Future<void> colorizeIndex(int i) async {
+    bars[i] = Bar(bars[i].value, color: Colors.amber);
+    await updateBarsGraph(bars);
+    bars[i] = Bar(bars[i].value);
+  }
+
   //logic
   //startIndex and endIndex only use is to accurately display graphics
   Future<List<Bar>> mergeSort(List<Bar> barsList, int startIndex, int endIndex) async {
     //logic
     if (barsList.length == 1) return barsList;
-    if (SortingControllerState().hasStopped == true) return barsList;
+    if (SortingControllerState().hasStopped) return barsList;
 
     //optmized version
     //breaks the function if the array is already sorted
     for (int i = 0; i < barsList.length - 1; i++) {
+      await colorizeIndex(i);
       if (barsList[i].value > barsList[i + 1].value) {
         break;
       } else if (i == barsList.length - 2) {
@@ -61,7 +68,7 @@ Future<void> merge(List<Bar> bars, Future<void> Function(List<Bar> newBars) upda
     //merge part
     while (left.isNotEmpty && right.isNotEmpty) {
       //graphics
-      if (SortingControllerState().hasStopped == true) break;
+      if (SortingControllerState().hasStopped) return barsList;
       left[0] = colorizeBar(left[0]);
       right[0] = colorizeBar(right[0]);
       await update(startIndex, endIndex, merged, left, right);

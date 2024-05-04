@@ -28,12 +28,14 @@ class SortingController {
   final List<Bar> bars;
   final Future<void> Function(List<Bar> newBar) updateBarsCallback;
 
+  int _nOfOperations = 0;
   int _speed = 3;
   String _algo = 'bubble sort';
 
   Future<void> _updateBarsGraph(List<Bar> newBar) async {
     await sleep();
     updateBarsCallback(newBar);
+    if (!SortingControllerState().hasStopped) _nOfOperations++;
   }
 
   void randomize() {
@@ -45,6 +47,7 @@ class SortingController {
   void startSorting() async {
     stopSorting();
 
+    _nOfOperations = 0;
     SortingControllerState().stopSorting = false;
 
     switch (_algo.toLowerCase()) {
@@ -85,6 +88,21 @@ class SortingController {
     }
   }
 
+  int get delayMs {
+    switch (_speed) {
+      case 1:
+        return 1000;
+      case 2:
+        return 100;
+      case 3:
+        return 1;
+      case 4:
+        return 0;
+      default:
+        return 9999999999;
+    }
+  }
+
   String get speedLabel {
     switch (_speed) {
       case 1:
@@ -104,7 +122,7 @@ class SortingController {
 
   double get speedValue => _speed.toDouble();
 
-  // bool get hasStopped => _stopSorting;
+  int get nOfOperations => _nOfOperations;
 
   set setAlgorithm(String algo) => _algo = algo;
 

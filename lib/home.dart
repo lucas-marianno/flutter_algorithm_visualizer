@@ -75,7 +75,9 @@ class _HomePageState extends State<HomePage> {
                         // TODO: feature
                         const Text('n array access'),
                         const Text('n calculations'),
-                        const Text('n ms delay')
+                        Text('${sortingController.delayMs}ms delay / loop'),
+                        Text('${sortingController.nOfOperations} operations'),
+                        const Text('00:00:0000 (mm:ss:mili)')
                       ],
                     ),
                   ),

@@ -1,36 +1,35 @@
-// void main() {
-//   List<int> a = List.generate(10, (index) => index + 1);
+void main() {
+  List<int> a = List.generate(10, (index) => index + 1);
 
-//   List<int> shuffled = a.toList();
-//   shuffled.shuffle();
+  List<int> shuffled = a.toList();
+  shuffled.shuffle();
 
-//   print(a);
-//   print(selectionSort(shuffled));
-//   print(a == selectionSort(shuffled));
+  print(a);
+  print(selecSort(shuffled));
+  print(a == selecSort(shuffled));
 
-//   // List<int> b = [];
-//   // print(b);
-//   // b.add(2);
-//   // print(b);
-// }
+  // List<int> b = [];
+  // print(b);
+  // b.add(2);
+  // print(b);
+}
 
-// List<int> selectionSort(List<int> list) {
-//   List<int> sorted = [];
+List<int> selecSort(List<int> list) {
+  int length = list.length;
 
-//   List<int> sort(List<int> unSorted) {
-//     if (unSorted.isEmpty) return sorted;
+  for (int i = 0; i < length - 1; i++) {
+    int minIndex = i;
+    for (int j = i + 1; j < length; j++) {
+      if (list[j] < list[minIndex]) {
+        minIndex = j;
+      }
+    }
+    if (minIndex != i) {
+      int temp = list[minIndex];
+      list[minIndex] = list[i];
+      list[i] = temp;
+    }
+  }
 
-//     int smallest = unSorted[0];
-
-//     for (int i = 1; i < unSorted.length; i++) {
-//       if (unSorted[i] < smallest) {
-//         smallest = unSorted[i];
-//       }
-//     }
-//     sorted.add(smallest);
-//     unSorted.remove(smallest);
-//     return sort(unSorted);
-//   }
-
-//   return sort(list);
-// }
+  return list;
+}

@@ -6,45 +6,34 @@ Future<void> selectionSort(
   List<Bar> bars,
   Future<void> Function(List<Bar> newBar) updateBarsGraph,
 ) async {
-  //logic
-  List<Bar> sorted = [];
-
-  //graphics
-  Future<void> update(List<Bar> unSorted) async {
-    await updateBarsGraph(sorted + unSorted);
+  Future<void> update(int i, {Color? color}) async {
+    bars[i] = Bar(bars[i].value, color: color);
+    await updateBarsGraph(bars);
   }
 
-  Future<List<Bar>> sort(List<Bar> unSorted) async {
-    //logic
-    if (unSorted.isEmpty) return sorted;
+  for (int sorted = 0; sorted < bars.length; sorted++) {
+    int indexOfSmallest = sorted;
 
-    //logic
-    Bar smallest = unSorted[0];
-    // graphics
-    int smallestIndex = 0;
+    update(indexOfSmallest, color: Colors.red);
 
-    for (int i = 1; i < unSorted.length; i++) {
-      //graphics
-      if (SortingControllerState().hasStopped == true) return sorted + unSorted;
-      unSorted[i] = Bar(unSorted[i].value, color: Colors.amber);
-      await update(unSorted);
-      unSorted[i] = Bar(unSorted[i].value);
-      await update(unSorted);
+    for (int i = sorted + 1; i < bars.length; i++) {
+      if (SortingControllerState().hasStopped) return;
+      await update(i, color: Colors.amber);
 
-      //logic
-      if (unSorted[i].value < smallest.value) {
-        unSorted[smallestIndex] = Bar(smallest.value);
+      if (bars[i].value < bars[indexOfSmallest].value) {
+        update(indexOfSmallest);
+        update(i, color: Colors.red);
 
-        unSorted[i] = Bar(unSorted[i].value, color: Colors.red);
-        await update(unSorted);
-        smallest = unSorted[i];
-        smallestIndex = i;
+        indexOfSmallest = i;
+      } else {
+        update(i);
       }
     }
-    sorted.add(Bar(smallest.value));
-    unSorted.remove(smallest);
-    return await sort(unSorted);
+    Bar temp = bars[sorted];
+    bars[sorted] = bars[indexOfSmallest];
+    bars[indexOfSmallest] = temp;
+    update(sorted);
   }
 
-  await updateBarsGraph(await sort(bars));
+  await updateBarsGraph(bars);
 }

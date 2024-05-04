@@ -9,40 +9,39 @@ Future<void> merge(List<Bar> bars, Future<void> Function(List<Bar> newBars) upda
     for (Bar bar in barsList) {
       colorized.add(Bar(bar.value, color: color));
     }
-    colorized[0] = Bar(colorized[0].value, color: Colors.amber);
     return colorized;
   }
 
-  Bar colorizeBar(Bar b) => Bar(b.value, color: Colors.amber);
-
-  Future<void> update(
+  Future<void> updateGraphics(
     int startIndex,
     int endIndex,
     List<Bar> merged,
     List<Bar> left,
-    List<Bar> right,
-  ) async {
+    List<Bar> right, {
+    bool highlightFirst = false,
+  }) async {
+    left = colorize(left, color: const Color.fromARGB(255, 68, 110, 131));
+    right = colorize(right, color: Colors.grey);
+
+    if (highlightFirst) {
+      if (left.isNotEmpty) left[0] = Bar(left[0].value, color: Colors.amber);
+      if (right.isNotEmpty) right[0] = Bar(right[0].value, color: Colors.amber);
+    }
+    if (merged.isNotEmpty) merged = colorize(merged);
+
     bars.replaceRange(startIndex, endIndex, merged + left + right);
     await updateBarsGraph(bars);
-  }
-
-  Future<void> colorizeIndex(int i) async {
-    bars[i] = Bar(bars[i].value, color: Colors.amber);
-    await updateBarsGraph(bars);
-    bars[i] = Bar(bars[i].value);
   }
 
   //logic
   //startIndex and endIndex only use is to accurately display graphics
   Future<List<Bar>> mergeSort(List<Bar> barsList, int startIndex, int endIndex) async {
-    //logic
     if (barsList.length == 1) return barsList;
-    if (SortingControllerState().hasStopped) return barsList;
 
-    //optmized version
-    //breaks the function if the array is already sorted
+    //breaks the loop if the array is already partially sorted or sorted
     for (int i = 0; i < barsList.length - 1; i++) {
-      await colorizeIndex(i);
+      if (SortingControllerState().hasStopped) return barsList;
+      updateBarsGraph(bars);
       if (barsList[i].value > barsList[i + 1].value) {
         break;
       } else if (i == barsList.length - 2) {
@@ -50,30 +49,21 @@ Future<void> merge(List<Bar> bars, Future<void> Function(List<Bar> newBars) upda
       }
     }
 
-    //logic
     List<Bar> merged = [];
     List<Bar> left = barsList.sublist(0, barsList.length ~/ 2);
     List<Bar> right = barsList.sublist(barsList.length ~/ 2);
 
-    //graphics
-    left = colorize(left, color: const Color.fromARGB(255, 68, 110, 131));
-    right = colorize(right, color: Colors.grey);
-    await update(startIndex, endIndex, merged, left, right);
+    await updateGraphics(startIndex, endIndex, merged, left, right);
 
-    //logic
-    //dividing the array (and sorting recursively)
+    //divide part
     left = await mergeSort(left, 0 + startIndex, barsList.length ~/ 2 + startIndex);
     right = await mergeSort(right, barsList.length ~/ 2 + startIndex, barsList.length + startIndex);
 
-    //merge part
+    //sort part
     while (left.isNotEmpty && right.isNotEmpty) {
-      //graphics
       if (SortingControllerState().hasStopped) return barsList;
-      left[0] = colorizeBar(left[0]);
-      right[0] = colorizeBar(right[0]);
-      await update(startIndex, endIndex, merged, left, right);
+      await updateGraphics(startIndex, endIndex, merged, left, right, highlightFirst: true);
 
-      //logic
       if (left[0].value < right[0].value) {
         merged.add(left[0]);
         left.removeAt(0);
@@ -81,31 +71,21 @@ Future<void> merge(List<Bar> bars, Future<void> Function(List<Bar> newBars) upda
         merged.add(right[0]);
         right.removeAt(0);
       }
-      //graphics
-      update(startIndex, endIndex, merged, left, right);
-      merged.last = Bar(merged.last.value);
+      updateGraphics(startIndex, endIndex, merged, left, right);
     }
 
-    // logic
-    // merge remainder
     while (left.isNotEmpty) {
-      left[0] = colorizeBar(left[0]);
       merged.add(left[0]);
       left.removeAt(0);
-      await update(startIndex, endIndex, merged, left, right);
+      await updateGraphics(startIndex, endIndex, merged, left, right);
     }
     while (right.isNotEmpty) {
-      right[0] = colorizeBar(right[0]);
       merged.add(right[0]);
       right.removeAt(0);
-      await update(startIndex, endIndex, merged, left, right);
+      await updateGraphics(startIndex, endIndex, merged, left, right);
     }
 
-    //graphics
-    merged = colorize(merged);
-    await update(startIndex, endIndex, merged, left, right);
-
-    //logic
+    await updateGraphics(startIndex, endIndex, merged, left, right);
     return merged;
   }
 

@@ -1,4 +1,5 @@
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bubble_sort.dart';
+import 'package:algorithm_visualizer/logic/sorting_algorithms/insertion_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/merge_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/selection_sort.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
@@ -38,23 +39,26 @@ class SortingController {
   void randomize() {
     stopSorting();
     bars.shuffle();
-    _updateBarsGraph(bars);
+    updateBarsCallback(bars);
   }
 
-  void startSorting() {
+  void startSorting() async {
     stopSorting();
 
     SortingControllerState().stopSorting = false;
 
     switch (_algo.toLowerCase()) {
       case 'bubble sort':
-        bubble(bars, _updateBarsGraph);
+        await bubble(bars, _updateBarsGraph);
       case 'merge sort':
-        merge(bars, _updateBarsGraph);
+        await merge(bars, _updateBarsGraph);
       case 'selection sort':
-        selectionSort(bars, _updateBarsGraph);
+        await selectionSort(bars, _updateBarsGraph);
+      case 'insertion sort':
+        await insertionSort(bars, _updateBarsGraph);
       default:
     }
+    stopSorting();
   }
 
   void stopSorting() {

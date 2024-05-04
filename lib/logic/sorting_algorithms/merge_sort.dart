@@ -9,8 +9,11 @@ Future<void> merge(List<Bar> bars, Future<void> Function(List<Bar> newBars) upda
     for (Bar bar in barsList) {
       colorized.add(Bar(bar.value, color: color));
     }
+    colorized[0] = Bar(colorized[0].value, color: Colors.amber);
     return colorized;
   }
+
+  Bar colorizeBar(Bar b) => Bar(b.value, color: Colors.amber);
 
   Future<void> update(
     int startIndex,
@@ -30,6 +33,7 @@ Future<void> merge(List<Bar> bars, Future<void> Function(List<Bar> newBars) upda
     if (barsList.length == 1) return barsList;
     if (SortingControllerState().hasStopped == true) return barsList;
 
+    //optmized version
     //breaks the function if the array is already sorted
     for (int i = 0; i < barsList.length - 1; i++) {
       if (barsList[i].value > barsList[i + 1].value) {
@@ -58,8 +62,8 @@ Future<void> merge(List<Bar> bars, Future<void> Function(List<Bar> newBars) upda
     while (left.isNotEmpty && right.isNotEmpty) {
       //graphics
       if (SortingControllerState().hasStopped == true) break;
-      left[0] = Bar(left[0].value, color: Colors.amber);
-      right[0] = Bar(right[0].value, color: Colors.amber);
+      left[0] = colorizeBar(left[0]);
+      right[0] = colorizeBar(right[0]);
       await update(startIndex, endIndex, merged, left, right);
 
       //logic
@@ -71,19 +75,23 @@ Future<void> merge(List<Bar> bars, Future<void> Function(List<Bar> newBars) upda
         right.removeAt(0);
       }
       //graphics
-      await update(startIndex, endIndex, merged, left, right);
+      update(startIndex, endIndex, merged, left, right);
       merged.last = Bar(merged.last.value);
     }
 
     // logic
     // merge remainder
     while (left.isNotEmpty) {
+      left[0] = colorizeBar(left[0]);
       merged.add(left[0]);
       left.removeAt(0);
+      await update(startIndex, endIndex, merged, left, right);
     }
     while (right.isNotEmpty) {
+      right[0] = colorizeBar(right[0]);
       merged.add(right[0]);
       right.removeAt(0);
+      await update(startIndex, endIndex, merged, left, right);
     }
 
     //graphics
@@ -94,5 +102,5 @@ Future<void> merge(List<Bar> bars, Future<void> Function(List<Bar> newBars) upda
     return merged;
   }
 
-  updateBarsGraph(await mergeSort(bars, 0, bars.length));
+  await updateBarsGraph(await mergeSort(bars, 0, bars.length));
 }

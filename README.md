@@ -9,7 +9,7 @@ With smooth graphics and animations!
 - [x] Bubble Sort
 - [x] Merge Sort
 - [x] Selection Sort
-- [ ] Insertion Sort
+- [x] Insertion Sort
 - [ ] Quick Sort
 - [ ] Heap Sort
 - [ ] Radix Sort

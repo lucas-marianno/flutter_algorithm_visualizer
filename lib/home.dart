@@ -162,7 +162,11 @@ class _HomePageState extends State<HomePage> {
                           selectedAlgorithm: sortingController.algorithm,
                           onTap: selectAlgorithm,
                         ),
-                        const MyButton(title: 'Insertion Sort', onTap: null),
+                        MyButton(
+                          title: 'Insertion Sort',
+                          selectedAlgorithm: sortingController.algorithm,
+                          onTap: selectAlgorithm,
+                        ),
                         const MyButton(title: 'Quick Sort', onTap: null),
                         const MyButton(title: 'Heap Sort', onTap: null),
                         const MyButton(title: 'Radix sort', onTap: null),

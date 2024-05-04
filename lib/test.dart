@@ -1,35 +1,31 @@
-void main() {
-  List<int> a = List.generate(10, (index) => index + 1);
+// void main() {
+//   List<int> a = List.generate(10, (index) => index + 1);
 
-  List<int> shuffled = a.toList();
-  shuffled.shuffle();
+//   List<int> shuffled = a.toList();
+//   shuffled.shuffle();
 
-  print(a);
-  print(selecSort(shuffled));
-  print(a == selecSort(shuffled));
+//   print(a);
+//   print(insertion(shuffled));
+//   print(a == insertion(shuffled));
 
-  // List<int> b = [];
-  // print(b);
-  // b.add(2);
-  // print(b);
-}
+//   // List<int> b = [];
+//   // print(b);
+//   // b.add(2);
+//   // print(b);
+// }
 
-List<int> selecSort(List<int> list) {
-  int length = list.length;
+// List<int> insertion(List<int> list) {
+//   for (int i = 1; i < list.length; i++) {
+//     int key = list[i];
+//     int j = i - 1;
 
-  for (int i = 0; i < length - 1; i++) {
-    int minIndex = i;
-    for (int j = i + 1; j < length; j++) {
-      if (list[j] < list[minIndex]) {
-        minIndex = j;
-      }
-    }
-    if (minIndex != i) {
-      int temp = list[minIndex];
-      list[minIndex] = list[i];
-      list[i] = temp;
-    }
-  }
-
-  return list;
-}
+//     // Move elements of list[0..i-1], that are greater than key,
+//     // to one position ahead of their current position
+//     while (j >= 0 && list[j] > key) {
+//       list[j + 1] = list[j];
+//       j--;
+//     }
+//     list[j + 1] = key;
+//   }
+//   return list;
+// }

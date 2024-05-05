@@ -13,26 +13,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final SortingController sortingController;
-  final int barHeight = 400;
-  int nOfBars = 100;
+
   List<Bar> bars = [];
 
   void selectAlgorithm(String algo) {
     setState(() {
       sortingController.setAlgorithm = algo;
     });
-  }
-
-  List<Bar> populate(int barHeight, int nOfBars) {
-    sortingController.stopSorting();
-    bars.clear();
-
-    double multiplier = barHeight / nOfBars;
-
-    for (int i = 1; i <= nOfBars; i++) {
-      bars.add(Bar((i * multiplier).toInt()));
-    }
-    return bars;
   }
 
   Future<void> updateBarsGraph(List<Bar> newBars) async {
@@ -45,10 +32,11 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     sortingController = SortingController(
       bars: bars,
+      barsQuantity: 100,
       updateBarsCallback: updateBarsGraph,
     );
+    sortingController.init();
 
-    bars = populate(barHeight, nOfBars);
     super.initState();
   }
 
@@ -99,15 +87,15 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       MySlider(
                         title: 'Quantity',
-                        label: nOfBars.toString(),
-                        value: nOfBars.toDouble(),
+                        label: sortingController.barsQuantity.toString(),
+                        value: sortingController.barsQuantity.toDouble(),
                         min: 2,
                         max: 100,
                         divisions: 100,
-                        onChanged: (value) {
-                          sortingController.stopSorting();
-                          nOfBars = value.toInt();
-                          bars = populate(barHeight, nOfBars);
+                        onChanged: (value) async {
+                          await sortingController.stopSorting();
+                          sortingController.setBarsQuantity = value.toInt();
+                          bars = sortingController.getBars;
                           setState(() {});
                         },
                       ),
@@ -130,15 +118,16 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Expanded(
-                          child: MyButton(
-                              title: 'Randomize', onTap: (_) => sortingController.randomize())),
+                        child: MyButton(
+                            title: 'Randomize', onTap: (_) => sortingController.randomize()),
+                      ),
                       Expanded(
                         child: MyButton(
                           title: SortingControllerState().hasStopped ? 'Start' : 'Stop',
-                          onTap: (_) {
+                          onTap: (_) async {
                             SortingControllerState().hasStopped
                                 ? sortingController.startSorting()
-                                : sortingController.stopSorting();
+                                : await sortingController.stopSorting();
                           },
                         ),
                       ),
@@ -176,7 +165,11 @@ class _HomePageState extends State<HomePage> {
                         const MyButton(title: 'Cocktail shaker Sort', onTap: null),
                         const MyButton(title: 'Gnome Sort', onTap: null),
                         const MyButton(title: 'Bitonic Sort', onTap: null),
-                        const MyButton(title: 'Bogo Sort', onTap: null),
+                        MyButton(
+                          title: 'Bogo Sort',
+                          selectedAlgorithm: sortingController.algorithm,
+                          onTap: selectAlgorithm,
+                        ),
                       ],
                     ),
                   ),

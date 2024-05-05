@@ -1,3 +1,4 @@
+import 'package:algorithm_visualizer/logic/sorting_algorithms/bogo_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bubble_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/insertion_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/merge_sort.dart';
@@ -23,11 +24,14 @@ class SortingControllerState extends ChangeNotifier {
 class SortingController {
   SortingController({
     required this.bars,
+    required this.barsQuantity,
     required this.updateBarsCallback,
   });
-  final List<Bar> bars;
   final Future<void> Function(List<Bar> newBar) updateBarsCallback;
+  final int barHeight = 400;
 
+  List<Bar> bars;
+  int barsQuantity = 100;
   int _nOfOperations = 0;
   int _speed = 3;
   String _algo = 'bubble sort';
@@ -38,14 +42,14 @@ class SortingController {
     if (!SortingControllerState().hasStopped) _nOfOperations++;
   }
 
-  void randomize() {
-    stopSorting();
+  void randomize() async {
+    await stopSorting();
     bars.shuffle();
     updateBarsCallback(bars);
   }
 
   void startSorting() async {
-    stopSorting();
+    await stopSorting();
 
     _nOfOperations = 0;
     SortingControllerState().stopSorting = false;
@@ -59,13 +63,16 @@ class SortingController {
         await selectionSort(bars, _updateBarsGraph);
       case 'insertion sort':
         await insertionSort(bars, _updateBarsGraph);
+      case 'bogo sort':
+        await bogoSort(bars, _updateBarsGraph);
       default:
     }
-    stopSorting();
+    await stopSorting();
   }
 
-  void stopSorting() {
+  Future<void> stopSorting() async {
     SortingControllerState().stopSorting = true;
+    await sleep();
     //TODO: use provider to manage state and stop the sorting algorithm at once
   }
 
@@ -118,11 +125,33 @@ class SortingController {
     }
   }
 
+  void init() {
+    _populate(barHeight);
+  }
+
+  Future<void> _populate(int barHeight) async {
+    await stopSorting();
+    bars.clear();
+
+    double multiplier = barHeight / barsQuantity;
+
+    for (int i = 1; i <= barsQuantity; i++) {
+      bars.add(Bar((i * multiplier).toInt()));
+    }
+  }
+
   String get algorithm => _algo;
 
   double get speedValue => _speed.toDouble();
 
   int get nOfOperations => _nOfOperations;
+
+  List<Bar> get getBars => bars;
+
+  set setBarsQuantity(int quantity) {
+    barsQuantity = quantity;
+    _populate(barHeight);
+  }
 
   set setAlgorithm(String algo) => _algo = algo;
 

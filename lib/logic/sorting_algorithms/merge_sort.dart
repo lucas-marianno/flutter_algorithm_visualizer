@@ -89,5 +89,6 @@ Future<void> merge(List<Bar> bars, Future<void> Function(List<Bar> newBars) upda
     return merged;
   }
 
-  await updateBarsGraph(await mergeSort(bars, 0, bars.length));
+  bars = await mergeSort(bars, 0, bars.length);
+  await updateBarsGraph(colorize(bars));
 }

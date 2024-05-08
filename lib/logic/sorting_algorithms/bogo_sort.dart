@@ -27,6 +27,8 @@ Future<void> bogoSort(
   }
 
   while (isSorted() || !SortingControllerState().hasStopped) {
+    if (isSorted()) return;
+
     bars.shuffle();
     colorizeRandom();
 

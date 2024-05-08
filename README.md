@@ -17,7 +17,7 @@ With smooth graphics and animations!
 - [ ] Cocktail Shaker Sort
 - [ ] Gnome Sort
 - [ ] Bitonic Sort
-- [ ] Bogo Sort
+- [x] Bogo Sort
 
 ![image](https://github.com/lucas-marianno/flutter_algorithm_visualizer/assets/120429072/ac4d8f82-a7a4-4cfb-b476-9e8395d49e0e)
 ![image](https://github.com/lucas-marianno/flutter_algorithm_visualizer/assets/120429072/be064d6b-3221-4432-88b6-7e46f5d2a4a0)

@@ -1,31 +1,40 @@
-// void main() {
-//   List<int> a = List.generate(10, (index) => index + 1);
+void main() {
+  List<int> a = List.generate(10, (index) => index + 1);
 
-//   List<int> shuffled = a.toList();
-//   shuffled.shuffle();
+  List<int> shuffled = a.toList();
+  shuffled.shuffle();
 
-//   print(a);
-//   print(insertion(shuffled));
-//   print(a == insertion(shuffled));
+  print(a);
+  quickSort(shuffled);
+}
 
-//   // List<int> b = [];
-//   // print(b);
-//   // b.add(2);
-//   // print(b);
-// }
+Future<void> quickSort(List<int> bars) async {
+  //logic
+  //startIndex and endIndex only use is to accurately display graphics
+  List<int> sort(List<int> barsList) {
+    print(barsList);
+    if (barsList.length <= 1) return barsList;
 
-// List<int> insertion(List<int> list) {
-//   for (int i = 1; i < list.length; i++) {
-//     int key = list[i];
-//     int j = i - 1;
+    int pivot = barsList[barsList.length ~/ 2];
 
-//     // Move elements of list[0..i-1], that are greater than key,
-//     // to one position ahead of their current position
-//     while (j >= 0 && list[j] > key) {
-//       list[j + 1] = list[j];
-//       j--;
-//     }
-//     list[j + 1] = key;
-//   }
-//   return list;
-// }
+    List<int> smaller = [];
+    List<int> larger = [];
+
+    while (barsList.isNotEmpty) {
+      if (barsList[0] <= pivot) {
+        smaller.add(barsList[0]);
+      } else {
+        larger.add(barsList[0]);
+      }
+      barsList.removeAt(0);
+    }
+    // smaller = sort(smaller);
+    // larger = sort(larger);
+
+    return sort(smaller) + [pivot] + sort(larger);
+  }
+
+  print('here');
+  bars = sort(bars);
+  print(bars);
+}

@@ -1,3 +1,4 @@
+import 'package:algorithm_visualizer/pages/algo_info_page.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:algorithm_visualizer/widgets/buttom.dart';
 import 'package:algorithm_visualizer/widgets/custom_slider.dart';
@@ -53,6 +54,20 @@ class _HomePageState extends State<HomePage> {
               child: Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AlgoInfoPage(sortingController.algorithm)),
+                        );
+                      },
+                      icon: const Icon(Icons.info_outline),
+                    ),
+                  ),
                   Positioned(
                     top: 0,
                     left: 0,

@@ -1,4 +1,4 @@
-import 'package:algorithm_visualizer/home.dart';
+import 'package:algorithm_visualizer/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {

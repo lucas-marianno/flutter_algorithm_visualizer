@@ -1,7 +1,7 @@
-#	Merge sort
+# Merge sort
 
 ### Space-time complexity:
-- o	O(n log n) - Ω(n log n) both in their best and worst-case scenarios, the complexity is n log n.
+- O(n log n) - Ω(n log n) both in their best and worst-case scenarios, the complexity is n log n.
 
 ### Brief algorithm description:
 - Divide and conquer style algorithm.

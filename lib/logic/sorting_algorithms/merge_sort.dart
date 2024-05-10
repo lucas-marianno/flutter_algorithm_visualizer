@@ -1,8 +1,12 @@
-import 'package:algorithm_visualizer/logic/sorting_speed_controller.dart';
+import 'package:algorithm_visualizer/logic/sorting_controller.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
-Future<void> merge(List<Bar> bars, Future<void> Function(List<Bar> newBars) updateBarsGraph) async {
+Future<void> merge(
+  List<Bar> bars,
+  Future<void> Function(List<Bar> newBars) updateBarsGraph,
+  void Function() registerOperation,
+) async {
   //graphics
   List<Bar> colorize(List<Bar> barsList, {Color? color}) {
     List<Bar> colorized = [];
@@ -61,17 +65,20 @@ Future<void> merge(List<Bar> bars, Future<void> Function(List<Bar> newBars) upda
         right.removeAt(0);
       }
       updateGraphics(startIndex, endIndex, merged, left, right);
+      registerOperation();
     }
 
     while (left.isNotEmpty) {
       merged.add(left[0]);
       left.removeAt(0);
       await updateGraphics(startIndex, endIndex, merged, left, right);
+      registerOperation();
     }
     while (right.isNotEmpty) {
       merged.add(right[0]);
       right.removeAt(0);
       await updateGraphics(startIndex, endIndex, merged, left, right);
+      registerOperation();
     }
 
     await updateGraphics(startIndex, endIndex, merged, left, right);

@@ -1,8 +1,12 @@
-import 'package:algorithm_visualizer/logic/sorting_speed_controller.dart';
+import 'package:algorithm_visualizer/logic/sorting_controller.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
-Future<void> bubble(List<Bar> bars, Future<void> Function(List<Bar> newBar) updateBarsGraph) async {
+Future<void> bubble(
+  List<Bar> bars,
+  Future<void> Function(List<Bar> newBar) updateBarsGraph,
+  void Function() registerOperation,
+) async {
   //graphics
   Future<void> highLight(List<int> indexes) async {
     for (int index in indexes) {
@@ -20,7 +24,7 @@ Future<void> bubble(List<Bar> bars, Future<void> Function(List<Bar> newBar) upda
 
   //logic
   Future<void> bubbleSort(int steps, {bool isSorted = false}) async {
-    if (steps <= 1 || isSorted) return;
+    if (steps <= 1) return;
     isSorted = true;
     for (int i = 0; i < steps - 1; i++) {
       if (SortingControllerState().hasStopped) return;
@@ -35,6 +39,7 @@ Future<void> bubble(List<Bar> bars, Future<void> Function(List<Bar> newBar) upda
       }
 
       undoHighLight([i, i + 1]);
+      registerOperation();
     }
     await bubbleSort(steps - 1, isSorted: isSorted);
   }

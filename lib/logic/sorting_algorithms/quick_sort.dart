@@ -1,8 +1,12 @@
-import 'package:algorithm_visualizer/logic/sorting_speed_controller.dart';
+import 'package:algorithm_visualizer/logic/sorting_controller.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
-Future<void> quick(List<Bar> bars, Future<void> Function(List<Bar> newBars) updateBarsGraph) async {
+Future<void> quick(
+  List<Bar> bars,
+  Future<void> Function(List<Bar> newBars) updateBarsGraph,
+  void Function() registerOperation,
+) async {
   List<Bar> colorize(List<Bar> barsList, {Color? color}) {
     List<Bar> colorized = [];
     for (Bar bar in barsList) {
@@ -58,6 +62,7 @@ Future<void> quick(List<Bar> bars, Future<void> Function(List<Bar> newBars) upda
 
       barsList.removeAt(0);
       updateGraphics(pre, smaller, barsList, equal, larger, pos);
+      registerOperation();
     }
     smaller = await sort(smaller, pre: pre, pos: equal + larger + pos);
     larger = await sort(larger, pre: pre + smaller + equal, pos: pos);

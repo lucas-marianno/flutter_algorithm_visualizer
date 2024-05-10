@@ -52,17 +52,17 @@ class SortingController {
 
     switch (_algo.toLowerCase()) {
       case 'bubble sort':
-        await bubble(bars, _updateBarsGraph);
+        await bubble(bars, _updateBarsGraph, _incrementOperations);
       case 'merge sort':
-        await merge(bars, _updateBarsGraph);
+        await merge(bars, _updateBarsGraph, _incrementOperations);
       case 'selection sort':
-        await selectionSort(bars, _updateBarsGraph);
+        await selectionSort(bars, _updateBarsGraph, _incrementOperations);
       case 'insertion sort':
-        await insertionSort(bars, _updateBarsGraph);
+        await insertionSort(bars, _updateBarsGraph, _incrementOperations);
       case 'quick sort':
-        await quick(bars, _updateBarsGraph);
+        await quick(bars, _updateBarsGraph, _incrementOperations);
       case 'bogo sort':
-        await bogoSort(bars, _updateBarsGraph);
+        await bogoSort(bars, _updateBarsGraph, _incrementOperations);
       default:
     }
     await stopSorting();
@@ -85,7 +85,19 @@ class SortingController {
     });
   }
 
+  Future<void> reverseOrder() async {
+    _speedBypass(() async {
+      await stopSorting();
+      bars = bars.reversed.toList();
+      await _updateBarsGraph(bars);
+    });
+  }
+
   /// private
+  void _incrementOperations() {
+    if (!SortingControllerState().hasStopped) _nOfOperations++;
+  }
+
   Future<void> _sleep() async {
     switch (_speed) {
       case 1:
@@ -129,7 +141,7 @@ class SortingController {
   Future<void> _updateBarsGraph(List<Bar> newBar) async {
     updateBarsCallback(newBar);
     await _sleep();
-    if (!SortingControllerState().hasStopped) _nOfOperations++;
+    // if (!SortingControllerState().hasStopped) _nOfOperations++;
   }
 
   /// getters

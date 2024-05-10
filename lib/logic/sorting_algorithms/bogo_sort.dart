@@ -1,11 +1,14 @@
 import 'dart:math';
 
-import 'package:algorithm_visualizer/logic/sorting_speed_controller.dart';
+import 'package:algorithm_visualizer/logic/sorting_controller.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
 Future<void> bogoSort(
-    List<Bar> bars, Future<void> Function(List<Bar> newBars) updateBarsGraph) async {
+  List<Bar> bars,
+  Future<void> Function(List<Bar> newBars) updateBarsGraph,
+  void Function() registerOperation,
+) async {
   void colorizeRandom() {
     for (int i = 0; i < bars.length; i++) {
       if (Random().nextBool()) {
@@ -36,5 +39,6 @@ Future<void> bogoSort(
 
     //just in case user sets to instant (avoids overflow)
     await Future.delayed(const Duration(milliseconds: 1));
+    registerOperation();
   }
 }

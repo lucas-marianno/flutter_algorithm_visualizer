@@ -2,7 +2,7 @@ import 'package:algorithm_visualizer/pages/algo_info_page.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:algorithm_visualizer/widgets/buttom.dart';
 import 'package:algorithm_visualizer/widgets/custom_slider.dart';
-import 'package:algorithm_visualizer/logic/sorting_speed_controller.dart';
+import 'package:algorithm_visualizer/logic/sorting_controller.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -133,8 +133,22 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Expanded(
-                        child: MyButton(
-                            title: 'Randomize', onTap: (_) => sortingController.randomize()),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: MyButton(
+                                title: 'Randomize',
+                                onTap: (_) => sortingController.randomize(),
+                              ),
+                            ),
+                            Expanded(
+                              child: MyButton(
+                                title: 'Reverse',
+                                onTap: (_) => sortingController.reverseOrder(),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       Expanded(
                         child: MyButton(

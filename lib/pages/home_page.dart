@@ -107,8 +107,8 @@ class _HomePageState extends State<HomePage> {
                         min: 2,
                         max: 100,
                         divisions: 100,
-                        onChanged: (value) async {
-                          await sortingController.stopSorting();
+                        onChanged: (value) {
+                          sortingController.stopSorting();
                           sortingController.setBarsQuantity = value.toInt();
                           bars = sortingController.getBars;
                           setState(() {});
@@ -173,7 +173,11 @@ class _HomePageState extends State<HomePage> {
                           selectedAlgorithm: sortingController.algorithm,
                           onTap: selectAlgorithm,
                         ),
-                        const MyButton(title: 'Quick Sort', onTap: null),
+                        MyButton(
+                          title: 'Quick Sort',
+                          selectedAlgorithm: sortingController.algorithm,
+                          onTap: selectAlgorithm,
+                        ),
                         const MyButton(title: 'Heap Sort', onTap: null),
                         const MyButton(title: 'Radix sort', onTap: null),
                         const MyButton(title: 'Shell Sort', onTap: null),

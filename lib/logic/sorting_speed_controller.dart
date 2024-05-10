@@ -2,11 +2,13 @@ import 'package:algorithm_visualizer/logic/sorting_algorithms/bogo_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bubble_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/insertion_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/merge_sort.dart';
+import 'package:algorithm_visualizer/logic/sorting_algorithms/quick_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/selection_sort.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
 class SortingControllerState extends ChangeNotifier {
+  /// singleton
   static final SortingControllerState _instance = SortingControllerState._internal();
   SortingControllerState._internal();
   factory SortingControllerState() => _instance;
@@ -22,13 +24,14 @@ class SortingControllerState extends ChangeNotifier {
 }
 
 class SortingController {
+  final Future<void> Function(List<Bar> newBar) updateBarsCallback;
+  final int barHeight = 400;
+
   SortingController({
     required this.bars,
     required this.barsQuantity,
     required this.updateBarsCallback,
   });
-  final Future<void> Function(List<Bar> newBar) updateBarsCallback;
-  final int barHeight = 400;
 
   List<Bar> bars;
   int barsQuantity = 100;
@@ -36,19 +39,12 @@ class SortingController {
   int _speed = 3;
   String _algo = 'bubble sort';
 
-  Future<void> _updateBarsGraph(List<Bar> newBar) async {
-    await sleep();
-    updateBarsCallback(newBar);
-    if (!SortingControllerState().hasStopped) _nOfOperations++;
+  /// public
+  Future<void> init() async {
+    await _populate(barHeight);
   }
 
-  void randomize() async {
-    await stopSorting();
-    bars.shuffle();
-    updateBarsCallback(bars);
-  }
-
-  void startSorting() async {
+  Future<void> startSorting() async {
     await stopSorting();
 
     _nOfOperations = 0;
@@ -63,6 +59,8 @@ class SortingController {
         await selectionSort(bars, _updateBarsGraph);
       case 'insertion sort':
         await insertionSort(bars, _updateBarsGraph);
+      case 'quick sort':
+        await quick(bars, _updateBarsGraph);
       case 'bogo sort':
         await bogoSort(bars, _updateBarsGraph);
       default:
@@ -71,12 +69,24 @@ class SortingController {
   }
 
   Future<void> stopSorting() async {
-    SortingControllerState().stopSorting = true;
-    await sleep();
+    await _speedBypass(() async {
+      SortingControllerState().stopSorting = true;
+      await _sleep();
+    });
     //TODO: use provider to manage state and stop the sorting algorithm at once
   }
 
-  Future<void> sleep() async {
+  Future<void> randomize() async {
+    _speedBypass(() async {
+      await stopSorting();
+      await _populate(barHeight);
+      bars.shuffle();
+      await _updateBarsGraph(bars);
+    });
+  }
+
+  /// private
+  Future<void> _sleep() async {
     switch (_speed) {
       case 1:
         await Future.delayed(const Duration(milliseconds: 1000));
@@ -95,6 +105,34 @@ class SortingController {
     }
   }
 
+  Future<void> _speedBypass(Future<void> Function() function) async {
+    int temp = _speed;
+    _speed = 4;
+    await function();
+    _speed = temp;
+  }
+
+  Future<void> _populate(int barHeight) async {
+    await _speedBypass(() async {
+      await stopSorting();
+      bars.clear();
+
+      double multiplier = barHeight / barsQuantity;
+
+      for (int i = 1; i <= barsQuantity; i++) {
+        bars.add(Bar((i * multiplier).toInt()));
+      }
+      await _updateBarsGraph(bars);
+    });
+  }
+
+  Future<void> _updateBarsGraph(List<Bar> newBar) async {
+    await _sleep();
+    updateBarsCallback(newBar);
+    if (!SortingControllerState().hasStopped) _nOfOperations++;
+  }
+
+  /// getters
   int get delayMs {
     switch (_speed) {
       case 1:
@@ -125,21 +163,6 @@ class SortingController {
     }
   }
 
-  void init() {
-    _populate(barHeight);
-  }
-
-  Future<void> _populate(int barHeight) async {
-    await stopSorting();
-    bars.clear();
-
-    double multiplier = barHeight / barsQuantity;
-
-    for (int i = 1; i <= barsQuantity; i++) {
-      bars.add(Bar((i * multiplier).toInt()));
-    }
-  }
-
   String get algorithm => _algo;
 
   double get speedValue => _speed.toDouble();
@@ -148,9 +171,12 @@ class SortingController {
 
   List<Bar> get getBars => bars;
 
+  /// setters
   set setBarsQuantity(int quantity) {
-    barsQuantity = quantity;
-    _populate(barHeight);
+    _speedBypass(() async {
+      barsQuantity = quantity;
+      await _populate(barHeight);
+    });
   }
 
   set setAlgorithm(String algo) => _algo = algo;

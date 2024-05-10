@@ -38,17 +38,6 @@ Future<void> merge(List<Bar> bars, Future<void> Function(List<Bar> newBars) upda
   Future<List<Bar>> mergeSort(List<Bar> barsList, int startIndex, int endIndex) async {
     if (barsList.length == 1) return barsList;
 
-    //breaks the loop if the array is already partially sorted or sorted
-    for (int i = 0; i < barsList.length - 1; i++) {
-      if (SortingControllerState().hasStopped) return barsList;
-      updateBarsGraph(bars);
-      if (barsList[i].value > barsList[i + 1].value) {
-        break;
-      } else if (i == barsList.length - 2) {
-        return barsList;
-      }
-    }
-
     List<Bar> merged = [];
     List<Bar> left = barsList.sublist(0, barsList.length ~/ 2);
     List<Bar> right = barsList.sublist(barsList.length ~/ 2);

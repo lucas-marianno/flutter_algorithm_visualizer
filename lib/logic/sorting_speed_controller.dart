@@ -24,7 +24,7 @@ class SortingControllerState extends ChangeNotifier {
 }
 
 class SortingController {
-  final Future<void> Function(List<Bar> newBar) updateBarsCallback;
+  final void Function(List<Bar> newBar) updateBarsCallback;
   final int barHeight = 400;
 
   SortingController({
@@ -127,8 +127,8 @@ class SortingController {
   }
 
   Future<void> _updateBarsGraph(List<Bar> newBar) async {
-    await _sleep();
     updateBarsCallback(newBar);
+    await _sleep();
     if (!SortingControllerState().hasStopped) _nOfOperations++;
   }
 

@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<void> updateBarsGraph(List<Bar> newBars) async {
+  void updateBarsGraph(List<Bar> newBars) {
     setState(() {
       bars = newBars;
     });

@@ -20,18 +20,15 @@ Future<void> bogoSort(
   }
 
   bool isSorted() {
-    bool sorted = true;
     for (int i = 1; i < bars.length; i++) {
       if (bars[i - 1].value > bars[i].value) {
-        sorted = false;
+        return false;
       }
     }
-    return sorted;
+    return true;
   }
 
-  while (isSorted() || !SortingControllerState().hasStopped) {
-    if (isSorted()) return;
-
+  while (!isSorted() && !SortingControllerState().hasStopped) {
     bars.shuffle();
     colorizeRandom();
 

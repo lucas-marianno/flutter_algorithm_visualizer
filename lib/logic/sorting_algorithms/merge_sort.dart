@@ -40,6 +40,7 @@ Future<void> merge(
   //logic
   //startIndex and endIndex only use is to accurately display graphics
   Future<List<Bar>> mergeSort(List<Bar> barsList, int startIndex, int endIndex) async {
+    if (SortingControllerState().hasStopped) return barsList;
     if (barsList.length == 1) return barsList;
 
     List<Bar> merged = [];

@@ -17,7 +17,6 @@ Future<void> insertionSort(
   for (int i = 1; i < bars.length; i++) {
     if (SortingControllerState().hasStopped) return;
 
-    //go back in the look and find the bar that is smaller than itself and place it there
     int j = i - 1;
     while (j >= 0 && bars[j].value > bars[j + 1].value) {
       if (SortingControllerState().hasStopped) return;

@@ -23,9 +23,9 @@ Future<void> bubble(
   }
 
   //logic
-  Future<void> bubbleSort(int steps, {bool isSorted = false}) async {
+  Future<void> bubbleSort(int steps) async {
     if (steps <= 1) return;
-    isSorted = true;
+    bool isSorted = true;
     for (int i = 0; i < steps - 1; i++) {
       if (SortingControllerState().hasStopped) return;
 
@@ -41,7 +41,8 @@ Future<void> bubble(
       undoHighLight([i, i + 1]);
       registerOperation();
     }
-    await bubbleSort(steps - 1, isSorted: isSorted);
+    if (isSorted) return;
+    await bubbleSort(steps - 1);
   }
 
   await bubbleSort(bars.length);

@@ -16,6 +16,7 @@ Future<void> insertionSort(
 
   for (int i = 1; i < bars.length; i++) {
     if (SortingControllerState().hasStopped) return;
+    await colorize(i);
 
     int j = i - 1;
     while (j >= 0 && bars[j].value > bars[j + 1].value) {

@@ -41,6 +41,7 @@ Future<void> heap(
       // Recursively heapify the affected sub-tree
       await heapify(arr, n, largest);
     }
+    registerOperation();
   }
 
   Future<List<Bar>> sort(List<Bar> arr) async {
@@ -50,7 +51,7 @@ Future<void> heap(
     for (int i = n ~/ 2 - 1; i >= 0; i--) {
       heapify(arr, n, i);
       await colorize([i]);
-      // await updateBarsGraph(bars);
+      registerOperation();
     }
 
     // One by one extract an element from heap
@@ -63,6 +64,7 @@ Future<void> heap(
       // call max heapify on the reduced heap
       await heapify(arr, i, 0);
       await colorize([i]);
+      registerOperation();
     }
     return arr;
   }

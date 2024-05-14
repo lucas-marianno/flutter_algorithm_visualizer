@@ -1,16 +1,17 @@
-#	Bogo sort
+# Bogo sort
 
-### Space-time complexity:
+## Time complexity
+
 - O((n+1)!) - O(1)
 
-### Brief algorithm description:
+## Brief algorithm description
 
 - Also known as permutation sort or stupid sort, is a highly inefficient sorting algorithm. It randomly permutes the elements of the list until the list is sorted. There is no guarantee of when (or if) the algorithm will terminate, making it unsuitable for practical use.
 - It's the only sorting algorithm with a theoretically possible O(1) time complexity hence there's a probability of sorting the array first try.
 
-### Implementation in Dart:
+## Implementation in Dart
 
-```
+```Dart
 List<int> bogo(List<int> arr) {
   bool isSorted() {
     for (int i = 1; i < arr.length; i++) {

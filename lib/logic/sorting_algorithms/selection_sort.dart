@@ -30,7 +30,6 @@ Future<void> selectionSort(
         update(i);
       }
       registerOperation();
-      if (i == bars.length) return;
     }
     Bar temp = bars[sorted];
     bars[sorted] = bars[indexOfSmallest];

@@ -1,9 +1,11 @@
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bogo_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bubble_sort.dart';
+import 'package:algorithm_visualizer/logic/sorting_algorithms/heap_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/insertion_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/merge_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/quick_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/selection_sort.dart';
+import 'package:algorithm_visualizer/logic/sorting_algorithms/shell_sort.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
@@ -61,6 +63,10 @@ class SortingController {
         await insertionSort(bars, _updateBarsGraph, _incrementOperations);
       case 'quick sort':
         await quick(bars, _updateBarsGraph, _incrementOperations);
+      case 'shell sort':
+        await shell(bars, _updateBarsGraph, _incrementOperations);
+      case 'heap sort':
+        await heap(bars, _updateBarsGraph, _incrementOperations);
       case 'bogo sort':
         await bogoSort(bars, _updateBarsGraph, _incrementOperations);
       default:

@@ -19,6 +19,7 @@ With smooth graphics and animations!
 - [ ] Bitonic Sort
 - [x] Bogo Sort
 
-![image](https://github.com/lucas-marianno/flutter_algorithm_visualizer/assets/120429072/ac4d8f82-a7a4-4cfb-b476-9e8395d49e0e)
-![image](https://github.com/lucas-marianno/flutter_algorithm_visualizer/assets/120429072/be064d6b-3221-4432-88b6-7e46f5d2a4a0)
-![image](https://github.com/lucas-marianno/flutter_algorithm_visualizer/assets/120429072/5f417701-4e1a-418b-8095-3f08e87ff9f9)
+![heap](https://github.com/lucas-marianno/flutter_algorithm_visualizer/assets/120429072/f504b4f7-d152-41ac-a1af-8ec28aebcc92)
+![info](https://github.com/lucas-marianno/flutter_algorithm_visualizer/assets/120429072/1b970880-ccdd-4ad8-a97d-c74b5932d336)
+![shell](https://github.com/lucas-marianno/flutter_algorithm_visualizer/assets/120429072/7d94ea02-a124-4792-9c40-b82916373777)
+![quick](https://github.com/lucas-marianno/flutter_algorithm_visualizer/assets/120429072/bfc92579-dd0b-462b-92f2-6e0af21c2219)

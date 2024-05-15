@@ -1,3 +1,4 @@
+import 'package:algorithm_visualizer/logic/sorting_controller.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
@@ -49,6 +50,7 @@ Future<void> heap(
 
     // Build heap (rearrange array)
     for (int i = n ~/ 2 - 1; i >= 0; i--) {
+      if (SortingControllerState().hasStopped) return arr;
       heapify(arr, n, i);
       await colorize([i]);
       registerOperation();
@@ -56,6 +58,7 @@ Future<void> heap(
 
     // One by one extract an element from heap
     for (int i = n - 1; i >= 0; i--) {
+      if (SortingControllerState().hasStopped) return arr;
       // Move current root to end
       Bar temp = arr[0];
       arr[0] = arr[i];

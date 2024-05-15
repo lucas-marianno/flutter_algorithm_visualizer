@@ -4,6 +4,7 @@ import 'package:algorithm_visualizer/logic/sorting_algorithms/heap_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/insertion_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/merge_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/quick_sort.dart';
+import 'package:algorithm_visualizer/logic/sorting_algorithms/radix_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/selection_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/shell_sort.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
@@ -39,7 +40,7 @@ class SortingController {
   int barsQuantity = 100;
   int _nOfOperations = 0;
   int _speed = 3;
-  String _algo = 'bubble sort';
+  String _algo = 'Bubble Sort';
   final Stopwatch _stopwatch = Stopwatch();
 
   /// public
@@ -71,6 +72,8 @@ class SortingController {
         await shell(bars, _updateBarsGraph, _incrementOperations);
       case 'heap sort':
         await heap(bars, _updateBarsGraph, _incrementOperations);
+      case 'radix sort':
+        await radixSort(bars, _updateBarsGraph, _incrementOperations);
       case 'bogo sort':
         await bogoSort(bars, _updateBarsGraph, _incrementOperations);
       default:

@@ -40,6 +40,7 @@ class SortingController {
   int _nOfOperations = 0;
   int _speed = 3;
   String _algo = 'bubble sort';
+  final Stopwatch _stopwatch = Stopwatch();
 
   /// public
   Future<void> init() async {
@@ -51,6 +52,9 @@ class SortingController {
 
     _nOfOperations = 0;
     SortingControllerState().stopSorting = false;
+
+    _stopwatch.reset();
+    _stopwatch.start();
 
     switch (_algo.toLowerCase()) {
       case 'bubble sort':
@@ -71,6 +75,9 @@ class SortingController {
         await bogoSort(bars, _updateBarsGraph, _incrementOperations);
       default:
     }
+
+    _stopwatch.stop();
+
     await stopSorting();
   }
 
@@ -188,6 +195,8 @@ class SortingController {
   int get nOfOperations => _nOfOperations;
 
   List<Bar> get getBars => bars;
+
+  Duration get elapsedTime => _stopwatch.elapsed;
 
   /// setters
   set setBarsQuantity(int quantity) {

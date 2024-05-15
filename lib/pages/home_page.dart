@@ -75,12 +75,9 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(sortingController.algorithm),
-                        // TODO: feature
-                        const Text('n array access'),
-                        const Text('n calculations'),
                         Text('${sortingController.delayMs}ms delay / loop'),
                         Text('${sortingController.nOfOperations} operations'),
-                        const Text('00:00:0000 (mm:ss:mili)')
+                        Text(sortingController.elapsedTime.toString())
                       ],
                     ),
                   ),

@@ -26,5 +26,4 @@ List<int> selectionSort(List<int> list) {
   }
   return list;
 }
-
 ```

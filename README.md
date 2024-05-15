@@ -4,16 +4,16 @@ Visualize the most common sorting algorithms in a friendly way.
 
 With smooth graphics and animations!
 
-### Algorithms available:
+## Algorithms available
 
 - [x] Bubble Sort
 - [x] Merge Sort
 - [x] Selection Sort
 - [x] Insertion Sort
-- [ ] Quick Sort
-- [ ] Heap Sort
+- [x] Quick Sort
+- [x] Heap Sort
 - [ ] Radix Sort
-- [ ] Shell Sort
+- [x] Shell Sort
 - [ ] Cocktail Shaker Sort
 - [ ] Gnome Sort
 - [ ] Bitonic Sort

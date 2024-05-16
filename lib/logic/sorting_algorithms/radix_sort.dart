@@ -5,6 +5,7 @@ Future<void> radixSort(
   List<Bar> bars,
   Future<void> Function(List<Bar> newBar) updateBarsGraph,
   void Function() registerOperation,
+  bool Function() hasStopped,
 ) async {
   List<Bar> colorizeList(List<Bar> bl, int interaction) {
     List<Bar> nl = [];
@@ -18,7 +19,7 @@ Future<void> radixSort(
     return nl;
   }
 
-  Future<void> update(List<List<Bar>> buckets, barsList) async {
+  List<Bar> bucketToList(List<List<Bar>> buckets) {
     List<Bar> nl = [];
     for (int i = 0; i < buckets.length; i++) {
       List<Bar> l = colorizeList(buckets[i], i);
@@ -26,18 +27,21 @@ Future<void> radixSort(
         nl.add(b);
       }
     }
-    bars = nl + barsList;
-    await updateBarsGraph(bars);
+    return nl;
   }
 
-  Future<List<Bar>> countSort(List<Bar> barsList, int lookAt) async {
+  Future<void> update(List<List<Bar>> buckets, barsList) async {
+    await updateBarsGraph(bucketToList(buckets) + barsList);
+  }
+
+  Future<void> countSort(int lookAt) async {
     List<List<Bar>> buckets = [[], [], [], [], [], [], [], [], [], []];
     //count
-    while (barsList.isNotEmpty) {
-      Bar b = barsList[0];
+    while (bars.isNotEmpty && !hasStopped()) {
+      Bar b = bars[0];
 
-      barsList[0] = Bar(barsList[0].value, color: Colors.red);
-      await update(buckets, barsList);
+      bars[0] = Bar(bars[0].value, color: Colors.red);
+      await update(buckets, bars);
 
       String bValue = b.value.toString();
       int digit =
@@ -45,24 +49,29 @@ Future<void> radixSort(
 
       buckets[digit].add(b);
 
-      barsList.removeAt(0);
-      update(buckets, barsList);
+      bars.removeAt(0);
+      update(buckets, bars);
       registerOperation();
     }
     // rebuild
+    List<Bar> temp = [];
+    if (bars.isNotEmpty) {
+      temp = [...bars];
+      bars.clear();
+    }
     for (int b = 0; b < buckets.length; b++) {
       for (int q = 0; q < buckets[b].length; q++) {
-        barsList.add(buckets[b][q]);
+        bars.add(buckets[b][q]);
         registerOperation();
       }
     }
-    return barsList;
+    bars.addAll([...temp]);
   }
 
-  Future<List<Bar>> radix(List<Bar> list) async {
+  Future<void> radix() async {
     int max = 0;
-    for (int i = 0; i < list.length; i++) {
-      int digits = list[i].value.toString().length;
+    for (int i = 0; i < bars.length; i++) {
+      int digits = bars[i].value.toString().length;
       if (digits > max) {
         max = digits;
         registerOperation();
@@ -70,12 +79,12 @@ Future<void> radixSort(
     }
 
     for (int i = 0; i < max; i++) {
-      list = await countSort(list, i);
+      await countSort(i);
+      updateBarsGraph(bars);
       registerOperation();
     }
-    return list;
   }
 
-  bars = await radix(bars);
+  await radix();
   updateBarsGraph(bars);
 }

@@ -1,4 +1,3 @@
-import 'package:algorithm_visualizer/logic/sorting_controller.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +5,7 @@ Future<void> shell(
   List<Bar> bars,
   Future<void> Function(List<Bar> newBar) updateBarsGraph,
   void Function() registerOperation,
+  bool Function() hasStopped,
 ) async {
   Future<void> colorize(List<int> index, {Color? color = Colors.amber}) async {
     for (int i in index) {
@@ -23,7 +23,7 @@ Future<void> shell(
 
     for (int gap = n ~/ 2; gap > 0; gap ~/= 2) {
       for (int i = gap; i < n; i++) {
-        if (SortingControllerState().hasStopped) return barsList;
+        if (hasStopped()) return barsList;
         await colorize([i]);
         registerOperation();
 
@@ -31,7 +31,7 @@ Future<void> shell(
 
         int j;
         for (j = i; j >= gap && barsList[j - gap].value > temp.value; j -= gap) {
-          if (SortingControllerState().hasStopped) return barsList;
+          if (hasStopped()) return barsList;
           await colorize([i, j - gap], color: Colors.red);
           registerOperation();
 

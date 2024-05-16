@@ -8,40 +8,22 @@ import 'package:algorithm_visualizer/logic/sorting_algorithms/radix_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/selection_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/shell_sort.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
-import 'package:flutter/material.dart';
-
-class SortingControllerState extends ChangeNotifier {
-  /// singleton
-  static final SortingControllerState _instance = SortingControllerState._internal();
-  SortingControllerState._internal();
-  factory SortingControllerState() => _instance;
-
-  bool _stopSorting = false;
-
-  set stopSorting(bool stopSorting) {
-    _stopSorting = stopSorting;
-    notifyListeners();
-  }
-
-  bool get hasStopped => _stopSorting;
-}
 
 class SortingController {
   final void Function(List<Bar> newBar) updateBarsCallback;
   final int barHeight = 400;
-
+  final Stopwatch _stopwatch = Stopwatch();
+  List<Bar> bars;
+  int barsQuantity;
+  int _nOfOperations = 0;
+  int _speed = 3;
+  String _algo = 'Bubble Sort';
+  bool _stopSorting = false;
   SortingController({
     required this.bars,
     required this.barsQuantity,
     required this.updateBarsCallback,
   });
-
-  List<Bar> bars;
-  int barsQuantity = 100;
-  int _nOfOperations = 0;
-  int _speed = 3;
-  String _algo = 'Bubble Sort';
-  final Stopwatch _stopwatch = Stopwatch();
 
   /// public
   Future<void> init() async {
@@ -49,52 +31,49 @@ class SortingController {
   }
 
   Future<void> startSorting() async {
-    await stopSorting();
+    await stopSort();
 
     _nOfOperations = 0;
-    SortingControllerState().stopSorting = false;
+    _stopSorting = false;
 
     _stopwatch.reset();
     _stopwatch.start();
 
     switch (_algo.toLowerCase()) {
       case 'bubble sort':
-        await bubble(bars, _updateBarsGraph, _incrementOperations);
+        await bubble(bars, _updateBarsGraph, _incrementOperations, hasStopped);
       case 'merge sort':
-        await merge(bars, _updateBarsGraph, _incrementOperations);
+        await merge(bars, _updateBarsGraph, _incrementOperations, hasStopped);
       case 'selection sort':
-        await selectionSort(bars, _updateBarsGraph, _incrementOperations);
+        await selectionSort(bars, _updateBarsGraph, _incrementOperations, hasStopped);
       case 'insertion sort':
-        await insertionSort(bars, _updateBarsGraph, _incrementOperations);
+        await insertionSort(bars, _updateBarsGraph, _incrementOperations, hasStopped);
       case 'quick sort':
-        await quick(bars, _updateBarsGraph, _incrementOperations);
+        await quick(bars, _updateBarsGraph, _incrementOperations, hasStopped);
       case 'shell sort':
-        await shell(bars, _updateBarsGraph, _incrementOperations);
+        await shell(bars, _updateBarsGraph, _incrementOperations, hasStopped);
       case 'heap sort':
-        await heap(bars, _updateBarsGraph, _incrementOperations);
+        await heap(bars, _updateBarsGraph, _incrementOperations, hasStopped);
       case 'radix sort':
-        await radixSort(bars, _updateBarsGraph, _incrementOperations);
+        await radixSort(bars, _updateBarsGraph, _incrementOperations, hasStopped);
       case 'bogo sort':
-        await bogoSort(bars, _updateBarsGraph, _incrementOperations);
+        await bogoSort(bars, _updateBarsGraph, _incrementOperations, hasStopped);
       default:
     }
 
     _stopwatch.stop();
 
-    await stopSorting();
+    await stopSort();
   }
 
-  Future<void> stopSorting() async {
-    await _speedBypass(() async {
-      SortingControllerState().stopSorting = true;
-      await _sleep();
-    });
-    //TODO: use provider to manage state and stop the sorting algorithm at once
+  Future<void> stopSort() async {
+    _stopSorting = true;
+    await _sleep();
   }
 
   Future<void> randomize() async {
-    _speedBypass(() async {
-      await stopSorting();
+    await _speedBypass(() async {
+      await stopSort();
       await _populate(barHeight);
       bars.shuffle();
       await _updateBarsGraph(bars);
@@ -102,8 +81,8 @@ class SortingController {
   }
 
   Future<void> reverseOrder() async {
-    _speedBypass(() async {
-      await stopSorting();
+    await _speedBypass(() async {
+      await stopSort();
       bars = bars.reversed.toList();
       await _updateBarsGraph(bars);
     });
@@ -111,7 +90,7 @@ class SortingController {
 
   /// private
   void _incrementOperations() {
-    if (!SortingControllerState().hasStopped) _nOfOperations++;
+    if (!_stopSorting) _nOfOperations++;
   }
 
   Future<void> _sleep() async {
@@ -141,23 +120,20 @@ class SortingController {
   }
 
   Future<void> _populate(int barHeight) async {
-    await _speedBypass(() async {
-      await stopSorting();
-      bars.clear();
+    await stopSort();
+    bars.clear();
 
-      double multiplier = barHeight / barsQuantity;
+    double multiplier = barHeight / barsQuantity;
 
-      for (int i = 1; i <= barsQuantity; i++) {
-        bars.add(Bar((i * multiplier).toInt()));
-      }
-      await _updateBarsGraph(bars);
-    });
+    for (int i = 1; i <= barsQuantity; i++) {
+      bars.add(Bar((i * multiplier).toInt()));
+    }
+    await _updateBarsGraph(bars);
   }
 
   Future<void> _updateBarsGraph(List<Bar> newBar) async {
     updateBarsCallback(newBar);
     await _sleep();
-    // if (!SortingControllerState().hasStopped) _nOfOperations++;
   }
 
   /// getters
@@ -201,7 +177,8 @@ class SortingController {
 
   Duration get elapsedTime => _stopwatch.elapsed;
 
-  /// setters
+  bool hasStopped() => _stopSorting;
+
   set setBarsQuantity(int quantity) {
     _speedBypass(() async {
       barsQuantity = quantity;

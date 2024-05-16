@@ -1,4 +1,3 @@
-import 'package:algorithm_visualizer/logic/sorting_controller.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +5,7 @@ Future<void> quick(
   List<Bar> bars,
   Future<void> Function(List<Bar> newBars) updateBarsGraph,
   void Function() registerOperation,
+  bool Function() hasStopped,
 ) async {
   List<Bar> colorize(List<Bar> barsList, {Color? color}) {
     List<Bar> colorized = [];
@@ -34,10 +34,9 @@ Future<void> quick(
   }
 
   Future<List<Bar>> sort(List<Bar> barsList, {List<Bar>? pre, List<Bar>? pos}) async {
+    if (barsList.isEmpty || hasStopped()) return barsList;
     pre = pre ?? [];
     pos = pos ?? [];
-    if (barsList.isEmpty) return barsList;
-    if (SortingControllerState().hasStopped) return barsList;
 
     List<Bar> smaller = [];
     List<Bar> equal = [];
@@ -47,8 +46,7 @@ Future<void> quick(
     Bar pivot = Bar(barsList[pivotIndex].value, color: Colors.red);
     barsList[pivotIndex] = pivot;
 
-    while (barsList.isNotEmpty) {
-      if (SortingControllerState().hasStopped) return smaller + barsList + equal + larger;
+    while (barsList.isNotEmpty && !hasStopped()) {
       barsList[0] = Bar(barsList[0].value, color: Colors.amber);
 
       await updateGraphics(pre, smaller, barsList, equal, larger, pos);

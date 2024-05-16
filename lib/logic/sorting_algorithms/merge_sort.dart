@@ -1,4 +1,3 @@
-import 'package:algorithm_visualizer/logic/sorting_controller.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +5,7 @@ Future<void> merge(
   List<Bar> bars,
   Future<void> Function(List<Bar> newBars) updateBarsGraph,
   void Function() registerOperation,
+  bool Function() hasStopped,
 ) async {
   //graphics
   List<Bar> colorize(List<Bar> barsList, {Color? color}) {
@@ -40,7 +40,7 @@ Future<void> merge(
   //logic
   //startIndex and endIndex only use is to accurately display graphics
   Future<List<Bar>> mergeSort(List<Bar> barsList, int startIndex, int endIndex) async {
-    if (SortingControllerState().hasStopped) return barsList;
+    if (hasStopped()) return barsList;
     if (barsList.length == 1) return barsList;
 
     List<Bar> merged = [];
@@ -55,7 +55,7 @@ Future<void> merge(
 
     //sort part
     while (left.isNotEmpty && right.isNotEmpty) {
-      if (SortingControllerState().hasStopped) return barsList;
+      if (hasStopped()) return barsList;
       await updateGraphics(startIndex, endIndex, merged, left, right, highlightFirst: true);
 
       if (left[0].value < right[0].value) {

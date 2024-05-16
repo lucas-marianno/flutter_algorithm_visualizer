@@ -1,4 +1,3 @@
-import 'package:algorithm_visualizer/logic/sorting_controller.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +5,7 @@ Future<void> heap(
   List<Bar> bars,
   Future<void> Function(List<Bar> newBar) updateBarsGraph,
   void Function() registerOperation,
+  bool Function() hasStopped,
 ) async {
   Future<void> colorize(List<int> index, {Color? color = Colors.amber}) async {
     for (int i in index) {
@@ -19,6 +19,7 @@ Future<void> heap(
   }
 
   Future<void> heapify(List<Bar> arr, int n, int i) async {
+    if (hasStopped()) return;
     await colorize([i]);
     int largest = i; // Initialize largest as root
     int left = 2 * i + 1; // left = 2*i + 1
@@ -46,11 +47,12 @@ Future<void> heap(
   }
 
   Future<List<Bar>> sort(List<Bar> arr) async {
+    if (hasStopped()) return arr;
     int n = arr.length;
 
     // Build heap (rearrange array)
     for (int i = n ~/ 2 - 1; i >= 0; i--) {
-      if (SortingControllerState().hasStopped) return arr;
+      if (hasStopped()) return arr;
       heapify(arr, n, i);
       await colorize([i]);
       registerOperation();
@@ -58,7 +60,7 @@ Future<void> heap(
 
     // One by one extract an element from heap
     for (int i = n - 1; i >= 0; i--) {
-      if (SortingControllerState().hasStopped) return arr;
+      if (hasStopped()) return arr;
       // Move current root to end
       Bar temp = arr[0];
       arr[0] = arr[i];

@@ -1,4 +1,3 @@
-import 'package:algorithm_visualizer/logic/sorting_controller.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +5,7 @@ Future<void> bubble(
   List<Bar> bars,
   Future<void> Function(List<Bar> newBar) updateBarsGraph,
   void Function() registerOperation,
+  bool Function() hasStopped,
 ) async {
   //graphics
   Future<void> highLight(List<int> indexes) async {
@@ -27,7 +27,7 @@ Future<void> bubble(
     if (steps <= 1) return;
     bool isSorted = true;
     for (int i = 0; i < steps - 1; i++) {
-      if (SortingControllerState().hasStopped) return;
+      if (hasStopped()) return;
 
       await highLight([i, i + 1]);
 

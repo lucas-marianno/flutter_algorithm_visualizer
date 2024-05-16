@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
 
   void updateBarsGraph(List<Bar> newBars) {
     setState(() {
-      bars = newBars;
+      bars = [...newBars];
     });
   }
 
@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                         max: 100,
                         divisions: 100,
                         onChanged: (value) {
-                          sortingController.stopSorting();
+                          sortingController.stopSort();
                           sortingController.setBarsQuantity = value.toInt();
                           bars = sortingController.getBars;
                           setState(() {});
@@ -149,11 +149,11 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Expanded(
                         child: MyButton(
-                          title: SortingControllerState().hasStopped ? 'Start' : 'Stop',
+                          title: sortingController.hasStopped() ? 'Start' : 'Stop',
                           onTap: (_) async {
-                            SortingControllerState().hasStopped
+                            sortingController.hasStopped()
                                 ? sortingController.startSorting()
-                                : await sortingController.stopSorting();
+                                : await sortingController.stopSort();
                           },
                         ),
                       ),

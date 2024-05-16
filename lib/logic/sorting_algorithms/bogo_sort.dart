@@ -1,6 +1,4 @@
 import 'dart:math';
-
-import 'package:algorithm_visualizer/logic/sorting_controller.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +6,7 @@ Future<void> bogoSort(
   List<Bar> bars,
   Future<void> Function(List<Bar> newBars) updateBarsGraph,
   void Function() registerOperation,
+  bool Function() hasStopped,
 ) async {
   void colorizeRandom() {
     for (int i = 0; i < bars.length; i++) {
@@ -28,7 +27,7 @@ Future<void> bogoSort(
     return true;
   }
 
-  while (!isSorted() && !SortingControllerState().hasStopped) {
+  while (!isSorted() && !hasStopped()) {
     bars.shuffle();
     colorizeRandom();
 

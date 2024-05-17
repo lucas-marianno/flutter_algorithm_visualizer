@@ -34,7 +34,7 @@ Future<void> radixSort(
     await updateBarsGraph(bucketToList(buckets) + barsList);
   }
 
-  Future<void> countSort(int lookAt) async {
+  Future<void> bucketSort(int lookAt) async {
     List<List<Bar>> buckets = [[], [], [], [], [], [], [], [], [], []];
     //count
     while (bars.isNotEmpty && !hasStopped()) {
@@ -43,9 +43,9 @@ Future<void> radixSort(
       bars[0] = Bar(bars[0].value, color: Colors.red);
       await update(buckets, bars);
 
-      String bValue = b.value.toString();
-      int digit =
-          (bValue.length - 1 - lookAt) < 0 ? 0 : int.parse(bValue[bValue.length - 1 - lookAt]);
+      final String bValue = b.value.toString();
+      final int index = bValue.length - 1 - lookAt;
+      final int digit = index < 0 ? 0 : int.parse(bValue[index]);
 
       buckets[digit].add(b);
 
@@ -79,7 +79,7 @@ Future<void> radixSort(
     }
 
     for (int i = 0; i < max; i++) {
-      await countSort(i);
+      await bucketSort(i);
       updateBarsGraph(bars);
       registerOperation();
     }

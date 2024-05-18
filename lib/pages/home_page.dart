@@ -204,9 +204,21 @@ class _HomePageState extends State<HomePage> {
                           selectedAlgorithm: sortingController.algorithm,
                           onTap: selectAlgorithm,
                         ),
-                        const MyButton(title: 'Cocktail shaker Sort', onTap: null),
-                        const MyButton(title: 'Gnome Sort', onTap: null),
-                        const MyButton(title: 'Bitonic Sort', onTap: null),
+                        MyButton(
+                          title: 'Cocktail shaker Sort',
+                          selectedAlgorithm: sortingController.algorithm,
+                          onTap: selectAlgorithm,
+                        ),
+                        MyButton(
+                          title: 'Gnome Sort',
+                          selectedAlgorithm: sortingController.algorithm,
+                          onTap: selectAlgorithm,
+                        ),
+                        MyButton(
+                          title: 'Bitonic Sort',
+                          selectedAlgorithm: sortingController.algorithm,
+                          onTap: selectAlgorithm,
+                        ),
                         MyButton(
                           title: 'Bogo Sort',
                           selectedAlgorithm: sortingController.algorithm,

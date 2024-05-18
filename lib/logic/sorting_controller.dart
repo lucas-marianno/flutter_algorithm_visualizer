@@ -1,5 +1,6 @@
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bogo_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bubble_sort.dart';
+import 'package:algorithm_visualizer/logic/sorting_algorithms/gnome_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/heap_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/insertion_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/merge_sort.dart';
@@ -56,6 +57,8 @@ class SortingController {
         await heap(bars, _updateBarsGraph, _incrementOperations, hasStopped);
       case 'radix sort':
         await radixSort(bars, _updateBarsGraph, _incrementOperations, hasStopped);
+      case 'gnome sort':
+        await gnomeSort(bars, _updateBarsGraph, _incrementOperations, hasStopped);
       case 'bogo sort':
         await bogoSort(bars, _updateBarsGraph, _incrementOperations, hasStopped);
       default:

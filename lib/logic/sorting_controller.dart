@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bitonic_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bogo_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bubble_sort.dart';
@@ -9,31 +10,36 @@ import 'package:algorithm_visualizer/logic/sorting_algorithms/quick_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/radix_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/selection_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/shell_sort.dart';
+import 'package:algorithm_visualizer/logic/sorting_algorithms/shuffle.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 
 class SortingController {
-  final void Function(List<Bar> newBar) updateBarsCallback;
-  final int barHeight = 400;
+  List<Bar> _bars;
+  final void Function(List<Bar> newBar) renderCallback;
+
+  final int _barHeight = 400;
   final Stopwatch _stopwatch = Stopwatch();
-  List<Bar> bars;
-  int barsQuantity;
+  final int _barsMaxQuantity = 500;
+  final int _barsInitialQuantity = 100;
+  final int _barsMinQuantity = 2;
+
+  // int _barsQuantity = 100;
   int _nOfOperations = 0;
   int _speed = 3;
   String _algo = 'Bubble Sort';
   bool _stopSorting = false;
-  SortingController({
-    required this.bars,
-    required this.barsQuantity,
-    required this.updateBarsCallback,
-  });
+
+  SortingController({required List<Bar> bars, required this.renderCallback}) : _bars = bars;
 
   /// public
   Future<void> init() async {
-    await _populate(barHeight);
+    await _populate(_barsInitialQuantity);
   }
 
+  bool hasStopped() => _stopSorting;
+
   Future<void> startSorting() async {
-    await stopSort();
+    await stopSorting();
 
     _nOfOperations = 0;
     _stopSorting = false;
@@ -43,54 +49,51 @@ class SortingController {
 
     switch (_algo.toLowerCase()) {
       case 'bubble sort':
-        await bubble(bars, _updateBarsGraph, _incrementOperations, hasStopped);
+        await bubble(_bars, _render, _incrementOperations, hasStopped);
       case 'merge sort':
-        await merge(bars, _updateBarsGraph, _incrementOperations, hasStopped);
+        await merge(_bars, _render, _incrementOperations, hasStopped);
       case 'selection sort':
-        await selectionSort(bars, _updateBarsGraph, _incrementOperations, hasStopped);
+        await selection(_bars, _render, _incrementOperations, hasStopped);
       case 'insertion sort':
-        await insertionSort(bars, _updateBarsGraph, _incrementOperations, hasStopped);
+        await insertion(_bars, _render, _incrementOperations, hasStopped);
       case 'quick sort':
-        await quick(bars, _updateBarsGraph, _incrementOperations, hasStopped);
+        await quick(_bars, _render, _incrementOperations, hasStopped);
       case 'shell sort':
-        await shell(bars, _updateBarsGraph, _incrementOperations, hasStopped);
+        await shell(_bars, _render, _incrementOperations, hasStopped);
       case 'heap sort':
-        await heap(bars, _updateBarsGraph, _incrementOperations, hasStopped);
+        await heap(_bars, _render, _incrementOperations, hasStopped);
       case 'radix sort':
-        await radixSort(bars, _updateBarsGraph, _incrementOperations, hasStopped);
+        await radix(_bars, _render, _incrementOperations, hasStopped);
       case 'bitonic sort':
-        await bitonicSort(bars, _updateBarsGraph, _incrementOperations, hasStopped);
+        await bitonic(_bars, _render, _incrementOperations, hasStopped);
       case 'gnome sort':
-        await gnomeSort(bars, _updateBarsGraph, _incrementOperations, hasStopped);
+        await gnome(_bars, _render, _incrementOperations, hasStopped);
       case 'bogo sort':
-        await bogoSort(bars, _updateBarsGraph, _incrementOperations, hasStopped);
+        await bogo(_bars, _render, _incrementOperations, hasStopped);
       default:
     }
 
     _stopwatch.stop();
 
-    await stopSort();
+    await stopSorting();
   }
 
-  Future<void> stopSort() async {
+  Future<void> stopSorting() async {
     _stopSorting = true;
     await _sleep();
   }
 
-  Future<void> randomize() async {
-    await _speedBypass(() async {
-      await stopSort();
-      await _populate(barHeight);
-      bars.shuffle();
-      await _updateBarsGraph(bars);
-    });
+  Future<void> startShuffling() async {
+    _stopSorting = !_stopSorting;
+    await shuffle(bars, _render, _incrementOperations, hasStopped);
+    await stopSorting();
   }
 
   Future<void> reverseOrder() async {
     await _speedBypass(() async {
-      await stopSort();
-      bars = bars.reversed.toList();
-      await _updateBarsGraph(bars);
+      await stopSorting();
+      _bars = _bars.reversed.toList();
+      await _render(_bars);
     });
   }
 
@@ -125,24 +128,35 @@ class SortingController {
     _speed = temp;
   }
 
-  Future<void> _populate(int barHeight) async {
-    await stopSort();
-    bars.clear();
+  Future<void> _populate(int quantity) async {
+    quantity = max(quantity, _barsMinQuantity);
 
-    double multiplier = barHeight / barsQuantity;
+    await stopSorting();
+    _bars.clear();
 
-    for (int i = 1; i <= barsQuantity; i++) {
-      bars.add(Bar((i * multiplier).toInt()));
+    double multiplier = _barHeight / quantity;
+
+    for (int i = 1; i <= quantity; i++) {
+      _bars.add(Bar((i * multiplier).toInt()));
     }
-    await _updateBarsGraph(bars);
+    await _render(_bars);
   }
 
-  Future<void> _updateBarsGraph(List<Bar> newBar) async {
-    updateBarsCallback(newBar);
+  Future<void> _render(List<Bar> newBar) async {
+    renderCallback(newBar);
     await _sleep();
   }
 
   /// getters
+  String get algorithm => _algo;
+
+  List<Bar> get bars => _bars;
+
+  int get barsQuantity => _bars.length < 2 ? 2 : _bars.length;
+
+  int get barsMaxQuantity => _barsMaxQuantity;
+  int get barsMinQuantity => _barsMinQuantity;
+
   int get delayMs {
     switch (_speed) {
       case 1:
@@ -157,6 +171,10 @@ class SortingController {
         return 9999999999;
     }
   }
+
+  Duration get elapsedTime => _stopwatch.elapsed;
+
+  int get nOfOperations => _nOfOperations;
 
   String get speedLabel {
     switch (_speed) {
@@ -173,24 +191,10 @@ class SortingController {
     }
   }
 
-  String get algorithm => _algo;
-
   double get speedValue => _speed.toDouble();
 
-  int get nOfOperations => _nOfOperations;
-
-  List<Bar> get getBars => bars;
-
-  Duration get elapsedTime => _stopwatch.elapsed;
-
-  bool hasStopped() => _stopSorting;
-
-  set setBarsQuantity(int quantity) {
-    _speedBypass(() async {
-      barsQuantity = quantity;
-      await _populate(barHeight);
-    });
-  }
+  /// setters
+  set setBarsQuantity(int newQuantity) => _populate(newQuantity);
 
   set setAlgorithm(String algo) => _algo = algo;
 

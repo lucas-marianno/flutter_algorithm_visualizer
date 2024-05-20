@@ -1,7 +1,7 @@
 import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
-Future<void> bitonicSort(
+Future<void> bitonic(
   List<Bar> bars,
   Future<void> Function(List<Bar> newBars) updateBarsGraph,
   void Function() registerOperation,

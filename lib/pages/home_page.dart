@@ -33,8 +33,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     sortingController = SortingController(
       bars: bars,
-      barsQuantity: 100,
-      updateBarsCallback: updateBarsGraph,
+      renderCallback: updateBarsGraph,
     );
     sortingController.init();
 
@@ -75,6 +74,7 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(sortingController.algorithm),
+                        Text('${sortingController.barsQuantity} array elements'),
                         Text('${sortingController.delayMs}ms delay / loop'),
                         Text('${sortingController.nOfOperations} operations'),
                         Text(sortingController.elapsedTime.toString())
@@ -101,14 +101,13 @@ class _HomePageState extends State<HomePage> {
                         title: 'Quantity',
                         label: sortingController.barsQuantity.toString(),
                         value: sortingController.barsQuantity.toDouble(),
-                        min: 2,
-                        max: 100,
-                        divisions: 100,
+                        min: sortingController.barsMinQuantity.toDouble(),
+                        max: sortingController.barsMaxQuantity.toDouble(),
+                        divisions: sortingController.barsMaxQuantity,
                         onChanged: (value) {
-                          sortingController.stopSort();
-                          sortingController.setBarsQuantity = value.toInt();
-                          bars = sortingController.getBars;
-                          setState(() {});
+                          setState(() {
+                            sortingController.setBarsQuantity = value.toInt();
+                          });
                         },
                       ),
                       MySlider(
@@ -119,8 +118,9 @@ class _HomePageState extends State<HomePage> {
                         max: 4,
                         divisions: 3,
                         onChanged: (speed) {
-                          sortingController.setSpeedFromValue = speed.toInt();
-                          setState(() {});
+                          setState(() {
+                            sortingController.setSpeedFromValue = speed.toInt();
+                          });
                         },
                       )
                     ],
@@ -134,8 +134,8 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Expanded(
                               child: MyButton(
-                                title: 'Randomize',
-                                onTap: (_) => sortingController.randomize(),
+                                title: 'Shuffle',
+                                onTap: (_) => sortingController.startShuffling(),
                               ),
                             ),
                             Expanded(
@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: (_) async {
                             sortingController.hasStopped()
                                 ? sortingController.startSorting()
-                                : await sortingController.stopSort();
+                                : await sortingController.stopSorting();
                           },
                         ),
                       ),

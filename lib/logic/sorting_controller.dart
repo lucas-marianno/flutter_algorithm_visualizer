@@ -14,22 +14,20 @@ import 'package:algorithm_visualizer/logic/sorting_algorithms/shuffle.dart';
 import 'package:algorithm_visualizer/widgets/bar.dart';
 
 class SortingController {
-  List<Bar> _bars;
-  final void Function(List<Bar> newBar) renderCallback;
+  SortingController({required this.stateCallBack});
 
+  final void Function() stateCallBack;
   final int _barHeight = 400;
   final Stopwatch _stopwatch = Stopwatch();
   final int _barsMaxQuantity = 500;
   final int _barsInitialQuantity = 100;
   final int _barsMinQuantity = 2;
 
-  // int _barsQuantity = 100;
+  List<Bar> _bars = [];
   int _nOfOperations = 0;
   int _speed = 3;
   String _algo = 'Bubble Sort';
   bool _stopSorting = false;
-
-  SortingController({required List<Bar> bars, required this.renderCallback}) : _bars = bars;
 
   /// public
   Future<void> init() async {
@@ -143,7 +141,8 @@ class SortingController {
   }
 
   Future<void> _render(List<Bar> newBar) async {
-    renderCallback(newBar);
+    // _bars = [...newBar];
+    stateCallBack();
     await _sleep();
   }
 
@@ -152,7 +151,11 @@ class SortingController {
 
   List<Bar> get bars => _bars;
 
-  int get barsQuantity => _bars.length < 2 ? 2 : _bars.length;
+  int get barsQuantity {
+    if (_bars.length < _barsMinQuantity) return _barsMinQuantity;
+    if (_bars.length > _barsMaxQuantity) return _barsMaxQuantity;
+    return _bars.length;
+  }
 
   int get barsMaxQuantity => _barsMaxQuantity;
   int get barsMinQuantity => _barsMinQuantity;

@@ -1,5 +1,4 @@
 import 'package:algorithm_visualizer/pages/algo_info_page.dart';
-import 'package:algorithm_visualizer/widgets/bar.dart';
 import 'package:algorithm_visualizer/widgets/buttom.dart';
 import 'package:algorithm_visualizer/widgets/custom_slider.dart';
 import 'package:algorithm_visualizer/logic/sorting_controller.dart';
@@ -15,26 +14,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late final SortingController sortingController;
 
-  List<Bar> bars = [];
-
   void selectAlgorithm(String algo) {
     setState(() {
       sortingController.setAlgorithm = algo;
     });
   }
 
-  void updateBarsGraph(List<Bar> newBars) {
-    setState(() {
-      bars = [...newBars];
-    });
-  }
+  void stateCallBack() => setState(() {});
 
   @override
   void initState() {
-    sortingController = SortingController(
-      bars: bars,
-      renderCallback: updateBarsGraph,
-    );
+    sortingController = SortingController(stateCallBack: stateCallBack);
     sortingController.init();
 
     super.initState();
@@ -83,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
-                    children: bars,
+                    children: sortingController.bars,
                   ),
                 ],
               ),

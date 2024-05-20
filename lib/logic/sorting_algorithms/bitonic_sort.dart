@@ -36,15 +36,21 @@ Future<void> bitonic(
     while (toBeRemoved.isNotEmpty) {
       bars.removeAt(toBeRemoved.last);
       toBeRemoved.removeLast();
+      await updateBarsGraph(bars);
     }
-    await updateBarsGraph(bars);
+  }
+
+  Future<void> addPadding() async {
+    int nextPow = nextPowerOf2(bars.length);
+
+    while (bars.length < nextPow) {
+      bars.add(const Bar(10000, color: Colors.grey));
+      await updateBarsGraph(bars);
+    }
   }
 
   Future<List<Bar>> sort(List<Bar> list) async {
-    int originalLength = list.length;
-    int nextPow = nextPowerOf2(originalLength);
-
-    list.addAll(List.filled(nextPow - originalLength, const Bar(10000, color: Colors.grey)));
+    await addPadding();
 
     int n = list.length;
 
@@ -52,7 +58,7 @@ Future<void> bitonic(
       for (int j = k ~/ 2; j > 0; j ~/= 2) {
         for (int i = 0; i < n; i++) {
           if (hasStopped()) {
-            await removePadding();
+            removePadding();
             return bars;
           }
           await colorize([i, j]);
@@ -72,8 +78,7 @@ Future<void> bitonic(
       }
     }
 
-    list.removeRange(originalLength, n);
-    await updateBarsGraph(list);
+    await removePadding();
 
     return list;
   }

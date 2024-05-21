@@ -1,24 +1,24 @@
+import 'package:algorithm_visualizer/logic/sorting_controller.dart';
 import 'package:algorithm_visualizer/widgets/borded_container.dart';
 import 'package:flutter/material.dart';
 
-class MyButton extends StatelessWidget {
-  const MyButton({
+class AlgoButton extends StatelessWidget {
+  const AlgoButton({
     required this.title,
-    required this.onTap,
-    this.selectedAlgorithm,
+    required this.sortingController,
     super.key,
   });
   final String title;
-  final void Function(String btnTitle)? onTap;
-  final String? selectedAlgorithm;
-
+  final SortingController sortingController;
   @override
   Widget build(BuildContext context) {
-    final bool selected = selectedAlgorithm?.toLowerCase() == title.toLowerCase();
+    final bool selected = sortingController.algorithm.toLowerCase() == title.toLowerCase();
     return MyBordedContainer(
       color: selected ? Colors.deepPurple : null,
       child: TextButton(
-        onPressed: () => onTap?.call(title),
+        onPressed: () {
+          sortingController.setAlgorithm = title;
+        },
         child: Text(
           title,
           style: TextStyle(color: selected ? Colors.white : null),

@@ -7,18 +7,16 @@ class MySlider extends StatelessWidget {
     required this.label,
     required this.value,
     required this.onChanged,
-    required this.divisions,
     required this.min,
     required this.max,
     super.key,
   });
   final String title;
   final String label;
-  final double value;
+  final int value;
   final void Function(double) onChanged;
-  final int divisions;
-  final double min;
-  final double max;
+  final int min;
+  final int max;
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +27,10 @@ class MySlider extends StatelessWidget {
             Text(title),
             Slider(
               label: label,
-              value: value,
-              min: min,
-              max: max,
-              divisions: divisions,
+              value: value.toDouble(),
+              min: min.toDouble(),
+              max: max.toDouble(),
+              divisions: max - min,
               onChanged: onChanged,
             ),
           ],

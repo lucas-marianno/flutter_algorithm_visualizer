@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bitonic_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bogo_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bubble_sort.dart';
+import 'package:algorithm_visualizer/logic/sorting_algorithms/cocktail_shaker_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/gnome_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/heap_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/insertion_sort.dart';
@@ -17,16 +18,31 @@ class SortingController {
   SortingController({required this.stateCallBack});
 
   final void Function() stateCallBack;
-  final int _barHeight = 400;
   final Stopwatch _stopwatch = Stopwatch();
-  final int _barsMaxQuantity = 500;
-  final int _barsInitialQuantity = 100;
-  final int _barsMinQuantity = 2;
+
+  static const int _barHeight = 400;
+  static const int _barsMaxQuantity = 500;
+  static const int _barsInitialQuantity = 100;
+  static const int _barsMinQuantity = 2;
+  static const Map<String, Function> _algorithms = {
+    'bubble sort': bubble,
+    'merge sort': merge,
+    'selection sort': selection,
+    'insertion sort': insertion,
+    'quick sort': quick,
+    'shell sort': shell,
+    'heap sort': heap,
+    'radix sort': radix,
+    'cocktail shaker sort': cocktail,
+    'bitonic sort': bitonic,
+    'gnome sort': gnome,
+    'bogo sort': bogo,
+  };
 
   List<Bar> _bars = [];
   int _nOfOperations = 0;
   int _speed = 3;
-  String _algo = 'Bubble Sort';
+  String _algo = _algorithms.entries.first.key;
   bool _stopSorting = false;
 
   /// public
@@ -45,31 +61,7 @@ class SortingController {
     _stopwatch.reset();
     _stopwatch.start();
 
-    switch (_algo.toLowerCase()) {
-      case 'bubble sort':
-        await bubble(_bars, _render, _incrementOperations, hasStopped);
-      case 'merge sort':
-        await merge(_bars, _render, _incrementOperations, hasStopped);
-      case 'selection sort':
-        await selection(_bars, _render, _incrementOperations, hasStopped);
-      case 'insertion sort':
-        await insertion(_bars, _render, _incrementOperations, hasStopped);
-      case 'quick sort':
-        await quick(_bars, _render, _incrementOperations, hasStopped);
-      case 'shell sort':
-        await shell(_bars, _render, _incrementOperations, hasStopped);
-      case 'heap sort':
-        await heap(_bars, _render, _incrementOperations, hasStopped);
-      case 'radix sort':
-        await radix(_bars, _render, _incrementOperations, hasStopped);
-      case 'bitonic sort':
-        await bitonic(_bars, _render, _incrementOperations, hasStopped);
-      case 'gnome sort':
-        await gnome(_bars, _render, _incrementOperations, hasStopped);
-      case 'bogo sort':
-        await bogo(_bars, _render, _incrementOperations, hasStopped);
-      default:
-    }
+    await _algorithms[_algo]?.call(_bars, _render, _incrementOperations, hasStopped);
 
     _stopwatch.stop();
 
@@ -141,7 +133,7 @@ class SortingController {
   }
 
   Future<void> _render(List<Bar> newBar) async {
-    // _bars = [...newBar];
+    _bars = [...newBar];
     stateCallBack();
     await _sleep();
   }
@@ -194,12 +186,18 @@ class SortingController {
     }
   }
 
-  double get speedValue => _speed.toDouble();
+  int get speedValue => _speed;
 
   /// setters
-  set setBarsQuantity(int newQuantity) => _populate(newQuantity);
+  set setBarsQuantity(num newQuantity) => _populate(newQuantity.toInt());
 
-  set setAlgorithm(String algo) => _algo = algo;
+  set setAlgorithm(String algo) {
+    _algo = algo.toLowerCase();
+    stateCallBack();
+  }
 
-  set setSpeedFromValue(int newSpeed) => _speed = newSpeed;
+  set setSpeedFromValue(num newSpeed) {
+    _speed = newSpeed.toInt();
+    stateCallBack();
+  }
 }

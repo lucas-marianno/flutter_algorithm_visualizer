@@ -1,5 +1,6 @@
 import 'package:algorithm_visualizer/pages/algo_info_page.dart';
-import 'package:algorithm_visualizer/widgets/buttom.dart';
+import 'package:algorithm_visualizer/widgets/algo_button.dart';
+import 'package:algorithm_visualizer/widgets/menu_button.dart';
 import 'package:algorithm_visualizer/widgets/custom_slider.dart';
 import 'package:algorithm_visualizer/logic/sorting_controller.dart';
 import 'package:flutter/material.dart';
@@ -20,11 +21,9 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void stateCallBack() => setState(() {});
-
   @override
   void initState() {
-    sortingController = SortingController(stateCallBack: stateCallBack);
+    sortingController = SortingController(stateCallBack: () => setState(() {}));
     sortingController.init();
 
     super.initState();
@@ -39,6 +38,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // graphics
             Expanded(
               child: Stack(
                 alignment: Alignment.bottomCenter,
@@ -78,40 +78,32 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+            // buttons
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(height: 5),
                   const Divider(),
+                  // menu buttons
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       MySlider(
                         title: 'Quantity',
                         label: sortingController.barsQuantity.toString(),
-                        value: sortingController.barsQuantity.toDouble(),
-                        min: sortingController.barsMinQuantity.toDouble(),
-                        max: sortingController.barsMaxQuantity.toDouble(),
-                        divisions: sortingController.barsMaxQuantity,
-                        onChanged: (value) {
-                          setState(() {
-                            sortingController.setBarsQuantity = value.toInt();
-                          });
-                        },
+                        value: sortingController.barsQuantity,
+                        min: sortingController.barsMinQuantity,
+                        max: sortingController.barsMaxQuantity,
+                        onChanged: (value) => sortingController.setBarsQuantity = value,
                       ),
                       MySlider(
                         title: 'Sorting Speed',
-                        value: sortingController.speedValue,
                         label: sortingController.speedLabel,
+                        value: sortingController.speedValue,
                         min: 1,
                         max: 4,
-                        divisions: 3,
-                        onChanged: (speed) {
-                          setState(() {
-                            sortingController.setSpeedFromValue = speed.toInt();
-                          });
-                        },
+                        onChanged: (speed) => sortingController.setSpeedFromValue = speed,
                       )
                     ],
                   ),
@@ -123,24 +115,24 @@ class _HomePageState extends State<HomePage> {
                         child: Row(
                           children: [
                             Expanded(
-                              child: MyButton(
+                              child: MenuButton(
                                 title: 'Shuffle',
-                                onTap: (_) => sortingController.startShuffling(),
+                                onTap: sortingController.startShuffling,
                               ),
                             ),
                             Expanded(
-                              child: MyButton(
+                              child: MenuButton(
                                 title: 'Reverse',
-                                onTap: (_) => sortingController.reverseOrder(),
+                                onTap: sortingController.reverseOrder,
                               ),
                             ),
                           ],
                         ),
                       ),
                       Expanded(
-                        child: MyButton(
+                        child: MenuButton(
                           title: sortingController.hasStopped() ? 'Start' : 'Stop',
-                          onTap: (_) async {
+                          onTap: () async {
                             sortingController.hasStopped()
                                 ? sortingController.startSorting()
                                 : await sortingController.stopSorting();
@@ -150,70 +142,24 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   const Divider(),
+                  // algo buttons
                   Expanded(
                     child: GridView.count(
                       crossAxisCount: 4,
                       children: [
-                        MyButton(
-                          title: 'Bubble Sort',
-                          selectedAlgorithm: sortingController.algorithm,
-                          onTap: selectAlgorithm,
-                        ),
-                        MyButton(
-                          title: 'Merge Sort',
-                          selectedAlgorithm: sortingController.algorithm,
-                          onTap: selectAlgorithm,
-                        ),
-                        MyButton(
-                          title: 'Selection Sort',
-                          selectedAlgorithm: sortingController.algorithm,
-                          onTap: selectAlgorithm,
-                        ),
-                        MyButton(
-                          title: 'Insertion Sort',
-                          selectedAlgorithm: sortingController.algorithm,
-                          onTap: selectAlgorithm,
-                        ),
-                        MyButton(
-                          title: 'Quick Sort',
-                          selectedAlgorithm: sortingController.algorithm,
-                          onTap: selectAlgorithm,
-                        ),
-                        MyButton(
-                          title: 'Shell Sort',
-                          selectedAlgorithm: sortingController.algorithm,
-                          onTap: selectAlgorithm,
-                        ),
-                        MyButton(
-                          title: 'Heap Sort',
-                          selectedAlgorithm: sortingController.algorithm,
-                          onTap: selectAlgorithm,
-                        ),
-                        MyButton(
-                          title: 'Radix Sort',
-                          selectedAlgorithm: sortingController.algorithm,
-                          onTap: selectAlgorithm,
-                        ),
-                        MyButton(
-                          title: 'Cocktail shaker Sort',
-                          selectedAlgorithm: sortingController.algorithm,
-                          onTap: selectAlgorithm,
-                        ),
-                        MyButton(
-                          title: 'Gnome Sort',
-                          selectedAlgorithm: sortingController.algorithm,
-                          onTap: selectAlgorithm,
-                        ),
-                        MyButton(
-                          title: 'Bitonic Sort',
-                          selectedAlgorithm: sortingController.algorithm,
-                          onTap: selectAlgorithm,
-                        ),
-                        MyButton(
-                          title: 'Bogo Sort',
-                          selectedAlgorithm: sortingController.algorithm,
-                          onTap: selectAlgorithm,
-                        ),
+                        AlgoButton(title: 'Bubble Sort', sortingController: sortingController),
+                        AlgoButton(title: 'Merge Sort', sortingController: sortingController),
+                        AlgoButton(title: 'Selection Sort', sortingController: sortingController),
+                        AlgoButton(title: 'Insertion Sort', sortingController: sortingController),
+                        AlgoButton(title: 'Quick Sort', sortingController: sortingController),
+                        AlgoButton(title: 'Shell Sort', sortingController: sortingController),
+                        AlgoButton(title: 'Heap Sort', sortingController: sortingController),
+                        AlgoButton(title: 'Radix Sort', sortingController: sortingController),
+                        AlgoButton(
+                            title: 'Cocktail Shaker Sort', sortingController: sortingController),
+                        AlgoButton(title: 'Gnome Sort', sortingController: sortingController),
+                        AlgoButton(title: 'Bitonic Sort', sortingController: sortingController),
+                        AlgoButton(title: 'Bogo Sort', sortingController: sortingController),
                       ],
                     ),
                   ),

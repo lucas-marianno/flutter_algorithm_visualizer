@@ -1,8 +1,8 @@
-import 'package:algorithm_visualizer/pages/algo_info_page.dart';
-import 'package:algorithm_visualizer/widgets/algo_button.dart';
-import 'package:algorithm_visualizer/widgets/menu_button.dart';
-import 'package:algorithm_visualizer/widgets/custom_slider.dart';
-import 'package:algorithm_visualizer/logic/sorting_controller.dart';
+import 'package:algovis/pages/algo_info_page.dart';
+import 'package:algovis/widgets/algo_button.dart';
+import 'package:algovis/widgets/menu_button.dart';
+import 'package:algovis/widgets/custom_slider.dart';
+import 'package:algovis/logic/sorting_controller.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -43,6 +43,10 @@ class _HomePageState extends State<HomePage> {
               child: Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: sortCtrl.bars,
+                  ),
                   Positioned(
                     top: 0,
                     right: 0,
@@ -69,10 +73,6 @@ class _HomePageState extends State<HomePage> {
                         Text(sortCtrl.elapsedTime.toString())
                       ],
                     ),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: sortCtrl.bars,
                   ),
                 ],
               ),

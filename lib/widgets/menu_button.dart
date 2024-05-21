@@ -1,4 +1,4 @@
-import 'package:algorithm_visualizer/widgets/borded_container.dart';
+import 'package:algovis/widgets/borded_container.dart';
 import 'package:flutter/material.dart';
 
 class MenuButton extends StatelessWidget {

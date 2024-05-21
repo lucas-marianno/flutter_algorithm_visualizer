@@ -12,11 +12,16 @@ With smooth graphics and animations!
 - [x] Insertion Sort
 - [x] Quick Sort
 - [x] Heap Sort
-- [ ] Radix Sort
+- [x] Radix Sort
 - [x] Shell Sort
-- [ ] Cocktail Shaker Sort
-- [ ] Gnome Sort
-- [ ] Bitonic Sort
+- [x] Cocktail Shaker Sort
+- [x] Gnome Sort
+- [x] Bitonic Sort
 - [x] Bogo Sort
+
+## Upcoming features
+
+- [] Darkmode
+- [] Sorting Sounds
 
 ![v0 5 0](https://github.com/lucas-marianno/flutter_algorithm_visualizer/assets/120429072/73ea5475-a580-47c0-a386-63cd15c8df1e)

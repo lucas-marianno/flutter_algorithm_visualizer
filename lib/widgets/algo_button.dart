@@ -1,5 +1,5 @@
-import 'package:algorithm_visualizer/logic/sorting_controller.dart';
-import 'package:algorithm_visualizer/widgets/borded_container.dart';
+import 'package:algovis/logic/sorting_controller.dart';
+import 'package:algovis/widgets/borded_container.dart';
 import 'package:flutter/material.dart';
 
 class AlgoButton extends StatelessWidget {

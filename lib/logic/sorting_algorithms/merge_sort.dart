@@ -1,4 +1,4 @@
-import 'package:algorithm_visualizer/widgets/bar.dart';
+import 'package:algovis/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
 Future<void> merge(

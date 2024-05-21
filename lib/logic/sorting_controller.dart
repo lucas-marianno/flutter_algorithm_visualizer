@@ -1,19 +1,19 @@
 import 'dart:math';
-import 'package:algorithm_visualizer/logic/sorting_algorithms/bitonic_sort.dart';
-import 'package:algorithm_visualizer/logic/sorting_algorithms/bitonic_sort_parallel.dart';
-import 'package:algorithm_visualizer/logic/sorting_algorithms/bogo_sort.dart';
-import 'package:algorithm_visualizer/logic/sorting_algorithms/bubble_sort.dart';
-import 'package:algorithm_visualizer/logic/sorting_algorithms/cocktail_shaker_sort.dart';
-import 'package:algorithm_visualizer/logic/sorting_algorithms/gnome_sort.dart';
-import 'package:algorithm_visualizer/logic/sorting_algorithms/heap_sort.dart';
-import 'package:algorithm_visualizer/logic/sorting_algorithms/insertion_sort.dart';
-import 'package:algorithm_visualizer/logic/sorting_algorithms/merge_sort.dart';
-import 'package:algorithm_visualizer/logic/sorting_algorithms/quick_sort.dart';
-import 'package:algorithm_visualizer/logic/sorting_algorithms/radix_sort.dart';
-import 'package:algorithm_visualizer/logic/sorting_algorithms/selection_sort.dart';
-import 'package:algorithm_visualizer/logic/sorting_algorithms/shell_sort.dart';
-import 'package:algorithm_visualizer/logic/sorting_algorithms/shuffle.dart';
-import 'package:algorithm_visualizer/widgets/bar.dart';
+import 'package:algovis/logic/sorting_algorithms/bitonic_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/bitonic_sort_parallel.dart';
+import 'package:algovis/logic/sorting_algorithms/bogo_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/bubble_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/cocktail_shaker_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/gnome_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/heap_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/insertion_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/merge_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/quick_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/radix_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/selection_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/shell_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/shuffle.dart';
+import 'package:algovis/widgets/bar.dart';
 
 class SortingController {
   SortingController({required this.stateCallBack});

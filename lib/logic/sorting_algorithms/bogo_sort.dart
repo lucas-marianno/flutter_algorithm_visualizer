@@ -1,5 +1,5 @@
-import 'package:algorithm_visualizer/logic/sorting_algorithms/shuffle.dart';
-import 'package:algorithm_visualizer/widgets/bar.dart';
+import 'package:algovis/logic/sorting_algorithms/shuffle.dart';
+import 'package:algovis/widgets/bar.dart';
 
 Future<void> bogo(
   List<Bar> bars,

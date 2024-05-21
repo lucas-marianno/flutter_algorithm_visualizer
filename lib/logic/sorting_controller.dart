@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bitonic_sort.dart';
+import 'package:algorithm_visualizer/logic/sorting_algorithms/bitonic_sort_parallel.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bogo_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/bubble_sort.dart';
 import 'package:algorithm_visualizer/logic/sorting_algorithms/cocktail_shaker_sort.dart';
@@ -35,6 +36,7 @@ class SortingController {
     'radix sort': radix,
     'cocktail shaker sort': cocktail,
     'bitonic sort': bitonic,
+    'bitonic sort (parallel)': parallelBitonic,
     'gnome sort': gnome,
     'bogo sort': bogo,
   };
@@ -74,6 +76,7 @@ class SortingController {
   }
 
   Future<void> startShuffling() async {
+    _nOfOperations = 0;
     _stopSorting = !_stopSorting;
     await shuffle(bars, _render, _incrementOperations, hasStopped);
     await stopSorting();

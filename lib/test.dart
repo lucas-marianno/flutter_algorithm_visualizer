@@ -1,54 +1,48 @@
-void main() {
-  // List<int> a = [12, 3, 7, 9, 6, 5, 0, 4, 2, 8, 1];
-  List<int> b = [12, 443, 27, 9, 66, 588, 454, 2];
-  // final b = [1, 2, 3, 4, 5, 7, 9, 6, 8];
+// void main() {
+//   List<int> a = [12, 3, 7, 9, 6, 5, 0, 4, 2, 8, 1];
+//   List<int> b = [12, 443, 27, 9, 66, 588, 454, 2];
+//   // final b = [1, 2, 3, 4, 5, 7, 9, 6, 8];
 
-  print(b);
+//   print(b);
 
-  // b = bitonic(b);
+//   cocktailShakerSort(b);
 
-  print(b);
-}
-
-// List<int> bitonic(List<int> list) {
-//   // given an array arr of length n, this code sorts it in place
-//   // all indices run from 0 to n-1
-//   int n = list.length;
-//   // k is doubled every iteration
-//   for (int k = 2; k <= n; k *= 2) {
-//     // j is halved at every iteration, with truncation of fractional parts
-//     for (int j = k ~/ 2; j > 0; j ~/= 2) {
-//       for (int i = 0; i < n; i++) {
-//         int l = i ^ j; // in C-like languages this is "i ^ j"
-//         if (l > i) {
-//           if ((i & k == 0 && list[i] > list[l]) || (i & k != 0 && list[i] < list[l])) {
-//             int temp = list[i];
-//             list[i] = list[l];
-//             list[l] = temp;
-//           }
-//         }
-//       }
-//     }
-//   }
-//   return list;
+//   print(b);
 // }
 
-// List<int> bitonic(List<int> list) {
-//   int n = list.length;
-//   for (int k = 2; k <= n; k *= 2) {
-//     for (int j = k ~/ 2; j > 0; j ~/= 2) {
-//       for (int i = 0; i < n; i++) {
-//         int l = i ^ j;
-//         if (l > i) {
-//           if ((i & k == 0 && list[i] > list[l]) || (i & k != 0 && list[i] < list[l])) {
-//             int temp = list[i];
-//             list[i] = list[l];
-//             list[l] = temp;
-//             print(list);
-//           }
-//         }
+// void cocktailShakerSort(List<int> list) {
+//   bool swapped = true;
+//   int start = 0;
+//   int end = list.length;
+
+//   while (swapped) {
+//     swapped = false;
+
+//     // Forward pass
+//     for (int i = start; i < end - 1; i++) {
+//       if (list[i] > list[i + 1]) {
+//         int temp = list[i];
+//         list[i] = list[i + 1];
+//         list[i + 1] = temp;
+//         swapped = true;
 //       }
 //     }
+
+//     if (!swapped) break;
+
+//     swapped = false;
+//     end--;
+
+//     // Backward pass
+//     for (int i = end - 1; i > start; i--) {
+//       if (list[i] < list[i - 1]) {
+//         int temp = list[i];
+//         list[i] = list[i - 1];
+//         list[i - 1] = temp;
+//         swapped = true;
+//       }
+//     }
+
+//     start++;
 //   }
-//   return list;
 // }

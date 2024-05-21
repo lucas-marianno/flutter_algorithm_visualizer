@@ -13,18 +13,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late final SortingController sortingController;
+  late final SortingController sortCtrl;
 
   void selectAlgorithm(String algo) {
     setState(() {
-      sortingController.setAlgorithm = algo;
+      sortCtrl.setAlgorithm = algo;
     });
   }
 
   @override
   void initState() {
-    sortingController = SortingController(stateCallBack: () => setState(() {}));
-    sortingController.init();
+    sortCtrl = SortingController(stateCallBack: () => setState(() {}));
+    sortCtrl.init();
 
     super.initState();
   }
@@ -50,8 +50,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => AlgoInfoPage(sortingController.algorithm)),
+                          MaterialPageRoute(builder: (context) => AlgoInfoPage(sortCtrl.algorithm)),
                         );
                       },
                       icon: const Icon(Icons.info_outline),
@@ -63,17 +62,17 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(sortingController.algorithm),
-                        Text('${sortingController.barsQuantity} array elements'),
-                        Text('${sortingController.delayMs}ms delay / loop'),
-                        Text('${sortingController.nOfOperations} operations'),
-                        Text(sortingController.elapsedTime.toString())
+                        Text(sortCtrl.algorithm),
+                        Text('${sortCtrl.barsQuantity} array elements'),
+                        Text('${sortCtrl.delayMs}ms delay / loop'),
+                        Text('${sortCtrl.nOfOperations} operations'),
+                        Text(sortCtrl.elapsedTime.toString())
                       ],
                     ),
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
-                    children: sortingController.bars,
+                    children: sortCtrl.bars,
                   ),
                 ],
               ),
@@ -91,19 +90,19 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       MySlider(
                         title: 'Quantity',
-                        label: sortingController.barsQuantity.toString(),
-                        value: sortingController.barsQuantity,
-                        min: sortingController.barsMinQuantity,
-                        max: sortingController.barsMaxQuantity,
-                        onChanged: (value) => sortingController.setBarsQuantity = value,
+                        label: sortCtrl.barsQuantity.toString(),
+                        value: sortCtrl.barsQuantity,
+                        min: sortCtrl.barsMinQuantity,
+                        max: sortCtrl.barsMaxQuantity,
+                        onChanged: (value) => sortCtrl.setBarsQuantity = value,
                       ),
                       MySlider(
                         title: 'Sorting Speed',
-                        label: sortingController.speedLabel,
-                        value: sortingController.speedValue,
+                        label: sortCtrl.speedLabel,
+                        value: sortCtrl.speedValue,
                         min: 1,
                         max: 4,
-                        onChanged: (speed) => sortingController.setSpeedFromValue = speed,
+                        onChanged: (speed) => sortCtrl.setSpeedFromValue = speed,
                       )
                     ],
                   ),
@@ -117,13 +116,13 @@ class _HomePageState extends State<HomePage> {
                             Expanded(
                               child: MenuButton(
                                 title: 'Shuffle',
-                                onTap: sortingController.startShuffling,
+                                onTap: sortCtrl.startShuffling,
                               ),
                             ),
                             Expanded(
                               child: MenuButton(
                                 title: 'Reverse',
-                                onTap: sortingController.reverseOrder,
+                                onTap: sortCtrl.reverseOrder,
                               ),
                             ),
                           ],
@@ -131,11 +130,11 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Expanded(
                         child: MenuButton(
-                          title: sortingController.hasStopped() ? 'Start' : 'Stop',
+                          title: sortCtrl.hasStopped() ? 'Start' : 'Stop',
                           onTap: () async {
-                            sortingController.hasStopped()
-                                ? sortingController.startSorting()
-                                : await sortingController.stopSorting();
+                            sortCtrl.hasStopped()
+                                ? sortCtrl.startSorting()
+                                : await sortCtrl.stopSorting();
                           },
                         ),
                       ),
@@ -147,19 +146,24 @@ class _HomePageState extends State<HomePage> {
                     child: GridView.count(
                       crossAxisCount: 4,
                       children: [
-                        AlgoButton(title: 'Bubble Sort', sortingController: sortingController),
-                        AlgoButton(title: 'Merge Sort', sortingController: sortingController),
-                        AlgoButton(title: 'Selection Sort', sortingController: sortingController),
-                        AlgoButton(title: 'Insertion Sort', sortingController: sortingController),
-                        AlgoButton(title: 'Quick Sort', sortingController: sortingController),
-                        AlgoButton(title: 'Shell Sort', sortingController: sortingController),
-                        AlgoButton(title: 'Heap Sort', sortingController: sortingController),
-                        AlgoButton(title: 'Radix Sort', sortingController: sortingController),
-                        AlgoButton(
-                            title: 'Cocktail Shaker Sort', sortingController: sortingController),
-                        AlgoButton(title: 'Gnome Sort', sortingController: sortingController),
-                        AlgoButton(title: 'Bitonic Sort', sortingController: sortingController),
-                        AlgoButton(title: 'Bogo Sort', sortingController: sortingController),
+                        // comparative
+                        AlgoButton(title: 'Bubble Sort', sortingController: sortCtrl),
+                        AlgoButton(title: 'Selection Sort', sortingController: sortCtrl),
+                        AlgoButton(title: 'Insertion Sort', sortingController: sortCtrl),
+                        AlgoButton(title: 'Bitonic Sort', sortingController: sortCtrl),
+                        // AlgoButton(title: 'Bitonic Sort (Parallel)', sortingController: sortCtrl),
+                        // mixed
+                        AlgoButton(title: 'Shell Sort', sortingController: sortCtrl),
+                        // divide and conquer
+                        AlgoButton(title: 'Merge Sort', sortingController: sortCtrl),
+                        AlgoButton(title: 'Quick Sort', sortingController: sortCtrl),
+                        // non comparative
+                        AlgoButton(title: 'Heap Sort', sortingController: sortCtrl),
+                        AlgoButton(title: 'Radix Sort', sortingController: sortCtrl),
+                        // stupid
+                        AlgoButton(title: 'Cocktail Shaker Sort', sortingController: sortCtrl),
+                        AlgoButton(title: 'Gnome Sort', sortingController: sortCtrl),
+                        AlgoButton(title: 'Bogo Sort', sortingController: sortCtrl),
                       ],
                     ),
                   ),

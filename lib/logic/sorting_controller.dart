@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:algovis/logic/sorting_algo_class.dart';
 import 'package:algovis/logic/sorting_algorithms/bitonic_sort.dart';
 import 'package:algovis/logic/sorting_algorithms/bitonic_sort_parallel.dart';
 import 'package:algovis/logic/sorting_algorithms/bogo_sort.dart';
@@ -25,8 +26,10 @@ class SortingController {
   static const int _barsMaxQuantity = 500;
   static const int _barsInitialQuantity = 100;
   static const int _barsMinQuantity = 2;
+  late BubbleSort bubble;
+
   static const Map<String, Function> _algorithms = {
-    'bubble sort': bubble,
+    // 'bubble sort': bubble,
     'merge sort': merge,
     'selection sort': selection,
     'insertion sort': insertion,
@@ -49,6 +52,12 @@ class SortingController {
 
   /// public
   Future<void> init() async {
+    bubble = BubbleSort(
+      updateBarsGraph: _render,
+      registerOperation: _incrementOperations,
+      hasStopped: hasStopped,
+    );
+
     await _populate(_barsInitialQuantity);
   }
 
@@ -63,7 +72,11 @@ class SortingController {
     _stopwatch.reset();
     _stopwatch.start();
 
-    await _algorithms[_algo]?.call(_bars, _render, _incrementOperations, hasStopped);
+    if (_algo.toLowerCase() == 'bubble sort') {
+      await bubble.sort(_bars);
+    } else {
+      await _algorithms[_algo]?.call(_bars, _render, _incrementOperations, hasStopped);
+    }
 
     _stopwatch.stop();
 

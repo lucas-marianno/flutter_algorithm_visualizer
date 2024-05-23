@@ -1,24 +1,15 @@
+import 'package:algovis/logic/sorting_algorithm.dart';
 import 'package:algovis/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
-Future<void> bitonic(
-  List<Bar> bars,
-  Future<void> Function(List<Bar> newBars) updateBarsGraph,
-  void Function() registerOperation,
-  bool Function() hasStopped,
-) async {
-  Future<void> colorize(List<int> l, {Color? color = Colors.amber}) async {
-    for (int i in l) {
-      bars[i] = Bar(bars[i].value, color: color);
-    }
-    await updateBarsGraph(bars);
-    for (int i in l) {
-      bars[i] = Bar(bars[i].value);
-    }
-    updateBarsGraph(bars);
-  }
-
-  int nextPowerOf2(int n) {
+class BitonicSort extends SortingAlgorithm {
+  BitonicSort({
+    required super.updateBarsGraph,
+    required super.registerOperation,
+    required super.hasStopped,
+  });
+  List<Bar> _bars = [];
+  int _nextPowerOf2(int n) {
     int power = 1;
     while (power < n) {
       power *= 2;
@@ -26,62 +17,61 @@ Future<void> bitonic(
     return power;
   }
 
-  Future<void> removePadding() async {
+  Future<void> _removePadding() async {
     List<int> toBeRemoved = [];
-    for (int i = 0; i < bars.length; i++) {
-      if (bars[i].value >= 10000) {
+    for (int i = 0; i < _bars.length; i++) {
+      if (_bars[i].value >= 10000) {
         toBeRemoved.add(i);
       }
     }
     while (toBeRemoved.isNotEmpty) {
-      bars.removeAt(toBeRemoved.last);
+      _bars.removeAt(toBeRemoved.last);
       toBeRemoved.removeLast();
-      await updateBarsGraph(bars);
+      await updateBarsGraph(_bars);
     }
   }
 
-  Future<void> addPadding() async {
-    int nextPow = nextPowerOf2(bars.length);
+  Future<void> _addPadding() async {
+    int nextPow = _nextPowerOf2(_bars.length);
 
-    while (bars.length < nextPow) {
-      bars.add(const Bar(10000, color: Colors.grey));
-      await updateBarsGraph(bars);
+    while (_bars.length < nextPow) {
+      _bars.add(const Bar(10000, color: Colors.grey));
+      await updateBarsGraph(_bars);
     }
   }
 
-  Future<List<Bar>> sort(List<Bar> list) async {
-    await addPadding();
+  @override
+  Future<void> sort(List<Bar> bars) async {
+    _bars = bars;
 
-    int n = list.length;
+    await _addPadding();
+
+    int n = _bars.length;
 
     for (int k = 2; k <= n; k *= 2) {
       for (int j = k ~/ 2; j > 0; j ~/= 2) {
         for (int i = 0; i < n; i++) {
           if (hasStopped()) {
-            removePadding();
-            return bars;
+            _removePadding();
+            return;
           }
-          await colorize([i, j]);
+          await tempHighlight([i, j], _bars);
           registerOperation();
 
           int l = i ^ j;
           if (l > i) {
-            if ((i & k == 0 && list[i].value > list[l].value) ||
-                (i & k != 0 && list[i].value < list[l].value)) {
-              Bar temp = list[i];
-              list[i] = list[l];
-              list[l] = temp;
-              colorize([i, j], color: Colors.red);
+            if ((i & k == 0 && _bars[i].value > _bars[l].value) ||
+                (i & k != 0 && _bars[i].value < _bars[l].value)) {
+              Bar temp = _bars[i];
+              _bars[i] = _bars[l];
+              _bars[l] = temp;
+              tempHighlight([i, j], _bars, color: Colors.red);
             }
           }
         }
       }
     }
 
-    await removePadding();
-
-    return list;
+    await _removePadding();
   }
-
-  await sort(bars);
 }

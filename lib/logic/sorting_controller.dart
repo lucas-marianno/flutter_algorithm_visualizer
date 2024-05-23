@@ -1,18 +1,5 @@
 import 'dart:math';
-import 'package:algovis/logic/sorting_algo_class.dart';
-import 'package:algovis/logic/sorting_algorithms/bitonic_sort.dart';
-import 'package:algovis/logic/sorting_algorithms/bitonic_sort_parallel.dart';
-import 'package:algovis/logic/sorting_algorithms/bogo_sort.dart';
-import 'package:algovis/logic/sorting_algorithms/bubble_sort.dart';
-import 'package:algovis/logic/sorting_algorithms/cocktail_shaker_sort.dart';
-import 'package:algovis/logic/sorting_algorithms/gnome_sort.dart';
-import 'package:algovis/logic/sorting_algorithms/heap_sort.dart';
-import 'package:algovis/logic/sorting_algorithms/insertion_sort.dart';
-import 'package:algovis/logic/sorting_algorithms/merge_sort.dart';
-import 'package:algovis/logic/sorting_algorithms/quick_sort.dart';
-import 'package:algovis/logic/sorting_algorithms/radix_sort.dart';
-import 'package:algovis/logic/sorting_algorithms/selection_sort.dart';
-import 'package:algovis/logic/sorting_algorithms/shell_sort.dart';
+import 'package:algovis/logic/sorter.dart';
 import 'package:algovis/logic/sorting_algorithms/shuffle.dart';
 import 'package:algovis/widgets/bar.dart';
 
@@ -26,37 +13,24 @@ class SortingController {
   static const int _barsMaxQuantity = 500;
   static const int _barsInitialQuantity = 100;
   static const int _barsMinQuantity = 2;
-  late BubbleSort bubble;
-
-  static const Map<String, Function> _algorithms = {
-    // 'bubble sort': bubble,
-    'merge sort': merge,
-    'selection sort': selection,
-    'insertion sort': insertion,
-    'quick sort': quick,
-    'shell sort': shell,
-    'heap sort': heap,
-    'radix sort': radix,
-    'cocktail shaker sort': cocktail,
-    'bitonic sort': bitonic,
-    'bitonic sort (parallel)': parallelBitonic,
-    'gnome sort': gnome,
-    'bogo sort': bogo,
-  };
+  late Sorter sorter;
 
   List<Bar> _bars = [];
   int _nOfOperations = 0;
   int _speed = 3;
-  String _algo = _algorithms.entries.first.key;
+  // String _algo = _algorithms.entries.first.key;
+  String _algo = 'bubble sort';
   bool _stopSorting = false;
 
   /// public
   Future<void> init() async {
-    bubble = BubbleSort(
+    sorter = Sorter(
       updateBarsGraph: _render,
       registerOperation: _incrementOperations,
       hasStopped: hasStopped,
     );
+
+    sorter.init();
 
     await _populate(_barsInitialQuantity);
   }
@@ -72,11 +46,7 @@ class SortingController {
     _stopwatch.reset();
     _stopwatch.start();
 
-    if (_algo.toLowerCase() == 'bubble sort') {
-      await bubble.sort(_bars);
-    } else {
-      await _algorithms[_algo]?.call(_bars, _render, _incrementOperations, hasStopped);
-    }
+    await sorter.sort(_algo, _bars);
 
     _stopwatch.stop();
 

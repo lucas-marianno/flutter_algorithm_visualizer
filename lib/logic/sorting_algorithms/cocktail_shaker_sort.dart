@@ -1,20 +1,15 @@
+import 'package:algovis/logic/sorting_algorithm.dart';
 import 'package:algovis/widgets/bar.dart';
-import 'package:flutter/material.dart';
 
-Future<void> cocktail(
-  List<Bar> bars,
-  Future<void> Function(List<Bar> newBar) updateBarsGraph,
-  void Function() registerOperation,
-  bool Function() hasStopped,
-) async {
-  Future<void> colorize(int i, {Color? color = Colors.amber}) async {
-    bars[i] = Bar(bars[i].value, color: color);
-    await updateBarsGraph(bars);
-    bars[i] = Bar(bars[i].value);
-    updateBarsGraph(bars);
-  }
+class CocktailSort extends SortingAlgorithm {
+  CocktailSort({
+    required super.updateBarsGraph,
+    required super.registerOperation,
+    required super.hasStopped,
+  });
 
-  Future<void> sort() async {
+  @override
+  Future<void> sort(List<Bar> bars) async {
     bool swapped = true;
     int start = 0;
     int end = bars.length;
@@ -25,7 +20,7 @@ Future<void> cocktail(
       // Forward pass
       for (int i = start; i < end - 1; i++) {
         if (hasStopped()) return;
-        await colorize(i);
+        await tempHighlight([i], bars);
         registerOperation();
         if (bars[i].value > bars[i + 1].value) {
           Bar temp = bars[i];
@@ -43,7 +38,7 @@ Future<void> cocktail(
       // Backward pass
       for (int i = end - 1; i > start; i--) {
         if (hasStopped()) return;
-        await colorize(i);
+        await tempHighlight([i], bars);
         registerOperation();
         if (bars[i].value < bars[i - 1].value) {
           Bar temp = bars[i];
@@ -55,7 +50,7 @@ Future<void> cocktail(
 
       start++;
     }
-  }
 
-  await sort();
+    await updateBarsGraph(bars);
+  }
 }

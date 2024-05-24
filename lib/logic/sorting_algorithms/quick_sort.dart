@@ -1,21 +1,23 @@
+import 'package:algovis/logic/sorting_algorithm.dart';
 import 'package:algovis/widgets/bar.dart';
 import 'package:flutter/material.dart';
 
-Future<void> quick(
-  List<Bar> bars,
-  Future<void> Function(List<Bar> newBars) updateBarsGraph,
-  void Function() registerOperation,
-  bool Function() hasStopped,
-) async {
-  List<Bar> colorize(List<Bar> barsList, {Color? color}) {
-    List<Bar> colorized = [];
-    for (Bar bar in barsList) {
-      colorized.add(Bar(bar.value, color: color));
-    }
-    return colorized;
+class QuickSort extends SortingAlgorithm {
+  QuickSort({
+    required super.updateBarsGraph,
+    required super.registerOperation,
+    required super.hasStopped,
+  });
+  List<Bar> _bars = [];
+
+  @override
+  Future<void> sort(List<Bar> bars) async {
+    _bars = bars;
+    bars = await _quick(bars);
+    await updateBarsGraph(bars);
   }
 
-  Future<void> updateGraphics(
+  Future<void> _updateGraphics(
     List<Bar> pre,
     List<Bar> left,
     List<Bar> center,
@@ -23,17 +25,16 @@ Future<void> quick(
     List<Bar> right,
     List<Bar> pos,
   ) async {
-    pre = colorize(pre);
+    pre = colorize(pre, color: Colors.blue);
     left = colorize(left, color: const Color.fromARGB(255, 68, 110, 131));
-    // center = colorize(center);
     equal = colorize(equal, color: Colors.red);
     right = colorize(right, color: Colors.grey);
-    pos = colorize(pos);
-    bars = pre + left + center + equal + right + pos;
-    await updateBarsGraph(bars);
+    pos = colorize(pos, color: Colors.blue);
+    _bars = pre + left + center + equal + right + pos;
+    await updateBarsGraph(_bars);
   }
 
-  Future<List<Bar>> sort(List<Bar> barsList, {List<Bar>? pre, List<Bar>? pos}) async {
+  Future<List<Bar>> _quick(List<Bar> barsList, {List<Bar>? pre, List<Bar>? pos}) async {
     if (barsList.isEmpty || hasStopped()) return barsList;
     pre = pre ?? [];
     pos = pos ?? [];
@@ -49,7 +50,7 @@ Future<void> quick(
     while (barsList.isNotEmpty && !hasStopped()) {
       barsList[0] = Bar(barsList[0].value, color: Colors.amber);
 
-      await updateGraphics(pre, smaller, barsList, equal, larger, pos);
+      await _updateGraphics(pre, smaller, barsList, equal, larger, pos);
       if (barsList[0].value < pivot.value) {
         smaller.add(Bar(barsList[0].value));
       } else if (barsList[0].value > pivot.value) {
@@ -59,15 +60,12 @@ Future<void> quick(
       }
 
       barsList.removeAt(0);
-      updateGraphics(pre, smaller, barsList, equal, larger, pos);
+      _updateGraphics(pre, smaller, barsList, equal, larger, pos);
       registerOperation();
     }
-    smaller = await sort(smaller, pre: pre, pos: equal + larger + pos);
-    larger = await sort(larger, pre: pre + smaller + equal, pos: pos);
+    smaller = await _quick(smaller, pre: pre, pos: equal + larger + pos);
+    larger = await _quick(larger, pre: pre + smaller + equal, pos: pos);
     barsList.addAll([...smaller, ...equal, ...larger]);
     return barsList;
   }
-
-  bars = await sort(bars);
-  await updateBarsGraph(bars);
 }

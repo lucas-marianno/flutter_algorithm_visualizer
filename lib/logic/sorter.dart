@@ -1,9 +1,16 @@
 import 'package:algovis/logic/sorting_algorithms/bitonic_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/bogo_sort.dart';
 import 'package:algovis/logic/sorting_algorithms/bubble_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/cocktail_shaker_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/gnome_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/heap_sort.dart';
 import 'package:algovis/logic/sorting_algorithms/insertion_sort.dart';
 import 'package:algovis/logic/sorting_algorithms/merge_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/quick_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/radix_sort.dart';
 import 'package:algovis/logic/sorting_algorithms/selection_sort.dart';
 import 'package:algovis/logic/sorting_algorithm.dart';
+import 'package:algovis/logic/sorting_algorithms/shell_sort.dart';
 import 'package:algovis/widgets/bar.dart';
 
 class Sorter {
@@ -24,9 +31,17 @@ class Sorter {
   late final SortingAlgorithm _selection;
   late final SortingAlgorithm _insertion;
   late final SortingAlgorithm _bitonic;
+  late final SortingAlgorithm _shell;
   late final SortingAlgorithm _merge;
+  late final SortingAlgorithm _quick;
+  late final SortingAlgorithm _heap;
+  late final SortingAlgorithm _radix;
+  late final SortingAlgorithm _cocktail;
+  late final SortingAlgorithm _gnome;
+  late final SortingAlgorithm _bogo;
+  // late final SortingAlgorithm _parallelBitonic;
 
-  void init() {
+  _setters() {
     _bubble = BubbleSort(
       updateBarsGraph: updateBarsGraph,
       registerOperation: registerOperation,
@@ -47,26 +62,64 @@ class Sorter {
       registerOperation: registerOperation,
       hasStopped: hasStopped,
     );
+    _shell = ShellSort(
+      updateBarsGraph: updateBarsGraph,
+      registerOperation: registerOperation,
+      hasStopped: hasStopped,
+    );
     _merge = MergeSort(
       updateBarsGraph: updateBarsGraph,
       registerOperation: registerOperation,
       hasStopped: hasStopped,
     );
+    _quick = QuickSort(
+      updateBarsGraph: updateBarsGraph,
+      registerOperation: registerOperation,
+      hasStopped: hasStopped,
+    );
+    _heap = HeapSort(
+      updateBarsGraph: updateBarsGraph,
+      registerOperation: registerOperation,
+      hasStopped: hasStopped,
+    );
+    _radix = RadixSort(
+      updateBarsGraph: updateBarsGraph,
+      registerOperation: registerOperation,
+      hasStopped: hasStopped,
+    );
+    _cocktail = CocktailSort(
+      updateBarsGraph: updateBarsGraph,
+      registerOperation: registerOperation,
+      hasStopped: hasStopped,
+    );
+    _gnome = GnomeSort(
+      updateBarsGraph: updateBarsGraph,
+      registerOperation: registerOperation,
+      hasStopped: hasStopped,
+    );
+    _bogo = BogoSort(
+      updateBarsGraph: updateBarsGraph,
+      registerOperation: registerOperation,
+      hasStopped: hasStopped,
+    );
+  }
 
+  void init() {
+    _setters();
     _algorithms = {
       'bubble sort': _bubble,
       'selection sort': _selection,
       'insertion sort': _insertion,
       'bitonic sort': _bitonic,
-      // 'shell sort': shell,
+      'shell sort': _shell,
       'merge sort': _merge,
-      // 'quick sort': quick,
-      // 'heap sort': heap,
-      // 'radix sort': radix,
-      // 'cocktail shaker sort': cocktail,
-      // 'gnome sort': gnome,
-      // 'bogo sort': bogo,
-      // 'bitonic sort (parallel)': parallelBitonic,
+      'quick sort': _quick,
+      'heap sort': _heap,
+      'radix sort': _radix,
+      'cocktail shaker sort': _cocktail,
+      'gnome sort': _gnome,
+      'bogo sort': _bogo,
+      // 'bitonic sort (parallel)': _parallelBitonic,
     };
 
     _hasInitialized = true;

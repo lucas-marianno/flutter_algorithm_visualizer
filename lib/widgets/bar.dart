@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 
-class Bar extends StatefulWidget {
+class Bar extends StatelessWidget {
   const Bar(this.value, {this.color, super.key});
   final int value;
   final Color? color;
 
   @override
-  State<Bar> createState() => _BarState();
-}
-
-class _BarState extends State<Bar> {
-  @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        color: widget.color ?? Colors.blue,
-        height: widget.value.toDouble(),
+        color: color ?? Colors.blue,
+        height: value.toDouble(),
       ),
     );
   }

@@ -18,7 +18,7 @@ class SortingController {
   int _nOfOperations = 0;
   int _speed = 3;
   String _algo = 'bubble sort';
-  bool _stopSorting = false;
+  bool _stopSorting = true;
 
   /// public
   Future<void> init() async {
@@ -95,9 +95,12 @@ class SortingController {
   }
 
   Future<void> _populate(int quantity) async {
-    quantity = max(quantity, _barsMinQuantity);
+    if (!_stopSorting) {
+      await stopSorting();
+      return;
+    }
 
-    await stopSorting();
+    quantity = max(quantity, _barsMinQuantity);
     _bars.clear();
 
     double multiplier = _barHeight / quantity;

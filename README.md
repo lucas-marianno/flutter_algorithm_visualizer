@@ -19,9 +19,15 @@ With smooth graphics and animations!
 - [x] Bitonic Sort
 - [x] Bogo Sort
 
-## Upcoming features
+## Full info on each algo
 
-- [] Darkmode
-- [] Sorting Sounds
+- Click the info button on the top-right corner to learn more about each and every algorithm.
 
-![v0 5 0](https://github.com/lucas-marianno/flutter_algorithm_visualizer/assets/120429072/73ea5475-a580-47c0-a386-63cd15c8df1e)
+## Links
+
+- Download the latest .apk [right here](https://github.com/lucas-marianno/flutter_algorithm_visualizer/releases/download/v0.6.0/Algorithm.Visualizer.v0.6.0.apk).
+- Check out the latest release notes [right here](https://github.com/lucas-marianno/flutter_algorithm_visualizer/releases).
+
+## Screenshots
+
+![Untitled_Project_V3 (1)](https://github.com/lucas-marianno/flutter_algorithm_visualizer/assets/120429072/1db8dbca-4ce7-4d71-a8d7-0cc1a173c6c6)

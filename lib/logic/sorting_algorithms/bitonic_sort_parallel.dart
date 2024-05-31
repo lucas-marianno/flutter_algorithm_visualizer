@@ -1,47 +1,95 @@
+import 'package:algovis/logic/sorting_algorithm.dart';
 import 'package:algovis/widgets/bar.dart';
+import 'package:flutter/material.dart';
 
-Future<void> parallelBitonic(
-  List<Bar> bars,
-  Future<void> Function(List<Bar> newBars) updateBarsGraph,
-  void Function() registerOperation,
-  bool Function() hasStopped,
-) async {
-// List<int> parallelBitonic(List<int> list) {
-//   void bitonicMerge(List<int> arr, int low, int cnt, bool dir) {
-//     if (cnt > 1) {
-//       int k = cnt ~/ 2;
-//       for (int i = low; i < low + k; i++) {
-//         if (dir == (arr[i] > arr[i + k])) {
-//           // Swap elements
-//           int temp = arr[i];
-//           arr[i] = arr[i + k];
-//           arr[i + k] = temp;
-//         }
-//       }
-//       bitonicMerge(arr, low, k, dir);
-//       bitonicMerge(arr, low + k, k, dir);
-//     }
-//   }
+class ParallelBitonicSort extends SortingAlgorithm {
+  ParallelBitonicSort({
+    required super.updateBarsGraph,
+    required super.registerOperation,
+    required super.hasStopped,
+  });
 
-//   void bitonicSort(List<int> arr, int low, int cnt, bool dir) {
-//     if (cnt > 1) {
-//       int k = cnt ~/ 2;
+  @override
+  Future<void> sort(List<Bar> bars) async {
+    await _addPadding(bars);
+    await _bitonicSort(bars, 0, bars.length, true);
+    await _removePadding(bars);
+  }
 
-//       // Sort first half in ascending order and second half in descending order
-//       bitonicSort(arr, low, k, true);
-//       bitonicSort(arr, low + k, k, false);
+  int _nextPowerOf2(int n) {
+    int power = 1;
+    while (power < n) {
+      power *= 2;
+    }
+    return power;
+  }
 
-//       // Merge the entire sequence in ascending or descending order
-//       bitonicMerge(arr, low, cnt, dir);
-//     }
-//   }
+  Future<void> _removePadding(List<Bar> bars) async {
+    List<int> toBeRemoved = [];
+    for (int i = 0; i < bars.length; i++) {
+      if (bars[i].value >= 10000) {
+        toBeRemoved.add(i);
+      }
+    }
+    while (toBeRemoved.isNotEmpty) {
+      bars.removeAt(toBeRemoved.last);
+      toBeRemoved.removeLast();
+      await updateBarsGraph(bars);
+    }
+  }
 
-//   void sort(List<int> arr, int n, bool up) {
-//     bitonicSort(arr, 0, n, up);
-//   }
+  Future<void> _addPadding(List<Bar> bars) async {
+    int nextPow = _nextPowerOf2(bars.length);
 
-//   sort(list, list.length, true);
+    while (bars.length < nextPow) {
+      bars.add(const Bar(10000, color: Colors.grey));
+      await updateBarsGraph(bars);
+    }
+  }
 
-//   return list;
-// }
+  Future<void> _bitonicSort(List<Bar> bars, int low, int count, bool dir) async {
+    if (count > 1) {
+      int k = count ~/ 2;
+
+      await Future.wait([
+        // Sort first half in ascending order
+        _bitonicSort(bars, low, k, true),
+        // Sort second half in descending order
+        _bitonicSort(bars, low + k, k, false),
+      ]);
+      // Merge the entire sequence in ascending or descending order
+      await _bitonicMerge(bars, low, count, dir);
+    }
+  }
+
+  Future<void> _bitonicMerge(List<Bar> bars, int low, int count, bool dir) async {
+    if (count > 1) {
+      int k = count ~/ 2;
+      for (int i = low; i < low + k; i++) {
+        if (hasStopped()) return;
+        await updateBarsGraph(bars);
+        if (dir == (bars[i].value > bars[i + k].value)) {
+          await _swap(bars, i, i + k);
+        }
+      }
+
+      await Future.wait([
+        _bitonicMerge(bars, low, k, dir),
+        _bitonicMerge(bars, low + k, k, dir),
+      ]);
+    }
+  }
+
+  Future<void> _swap(List<Bar> bars, int i, int j) async {
+    await highlight([i, j], bars, color: Colors.amber);
+
+    Bar temp = bars[i];
+    bars[i] = bars[j];
+    bars[j] = temp;
+
+    await updateBarsGraph(bars);
+    registerOperation();
+
+    await undoHighlight([i, j], bars);
+  }
 }

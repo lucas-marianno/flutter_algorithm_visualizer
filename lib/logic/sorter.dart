@@ -1,4 +1,5 @@
 import 'package:algovis/logic/sorting_algorithms/bitonic_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/bitonic_sort_parallel.dart';
 import 'package:algovis/logic/sorting_algorithms/bogo_sort.dart';
 import 'package:algovis/logic/sorting_algorithms/bubble_sort.dart';
 import 'package:algovis/logic/sorting_algorithms/cocktail_shaker_sort.dart';
@@ -39,7 +40,7 @@ class Sorter {
   late final SortingAlgorithm _cocktail;
   late final SortingAlgorithm _gnome;
   late final SortingAlgorithm _bogo;
-  // late final SortingAlgorithm _parallelBitonic;
+  late final SortingAlgorithm _parallelBitonic;
 
   _setters() {
     _bubble = BubbleSort(
@@ -58,6 +59,11 @@ class Sorter {
       hasStopped: hasStopped,
     );
     _bitonic = BitonicSort(
+      updateBarsGraph: updateBarsGraph,
+      registerOperation: registerOperation,
+      hasStopped: hasStopped,
+    );
+    _parallelBitonic = ParallelBitonicSort(
       updateBarsGraph: updateBarsGraph,
       registerOperation: registerOperation,
       hasStopped: hasStopped,
@@ -111,6 +117,7 @@ class Sorter {
       'selection sort': _selection,
       'insertion sort': _insertion,
       'bitonic sort': _bitonic,
+      'bitonic sort (parallel)': _parallelBitonic,
       'shell sort': _shell,
       'merge sort': _merge,
       'quick sort': _quick,
@@ -119,7 +126,6 @@ class Sorter {
       'cocktail shaker sort': _cocktail,
       'gnome sort': _gnome,
       'bogo sort': _bogo,
-      // 'bitonic sort (parallel)': _parallelBitonic,
     };
 
     _hasInitialized = true;
@@ -127,6 +133,7 @@ class Sorter {
 
   Future<void> sort(String algorithm, List<Bar> bars) async {
     assert(_hasInitialized, '$Sorter must be initialized before use.');
+    algorithm = algorithm.toLowerCase();
     if (!_algorithms.containsKey(algorithm)) throw '$algorithm hasn\'t been implemented.';
 
     await _algorithms[algorithm]!.sort(bars);

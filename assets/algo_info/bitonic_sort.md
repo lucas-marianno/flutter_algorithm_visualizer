@@ -2,7 +2,7 @@
 
 - Bitonic mergesort is a parallel algorithm for sorting. It is also used as a construction method for building a sorting network.
 - This makes it a popular choice for sorting large numbers of elements on an architecture which itself contains a large number of parallel execution units running in lockstep, such as a typical GPU.
-- Bitonic sort only work with arrays where the number of elements are a power of two. To sort arrays whose lengths are not a power of 2 using Bitonic Sort, the array must be padded with a high-value element (like infinity) to the next power of 2. After sorting, you can then remove the padding elements.
+- Bitonic sort only works with arrays where the number of elements are a power of two. To sort arrays whose lengths are not a power of 2 using Bitonic Sort, the array must be padded with a high-value element (like infinity) to the next power of 2. After sorting, you can then remove the padding elements.
 
 ## Time complexity
 
@@ -11,11 +11,11 @@
 ## Brief algorithm description
 
 - The algorithm divides the list into two halves, sorts one half in ascending order and the other half in descending order to create a bitonic sequence. It then merges the sequence by comparing and swapping elements to form a sorted sequence. This process is repeated, dividing the sequence into smaller bitonic sequences and merging them.
-- In this app, bitonic sorting happens in sequential processing in order to promote easier visualization.
+- This version of the bitonic sorting algorithm uses sequential processing in order to promote easier visualization.
 
-## Implementation in Dart
+## Implementations in Dart
 
-### Sequencial processing
+### Sequencial processing (Recursion-free)
 
 ```Dart
 void sequencialBitonicSort(List<int> list) {
@@ -52,10 +52,4 @@ void sequencialBitonicSort(List<int> list) {
   // Remove the padding elements
   list.removeRange(originalLength, n);
 }
-```
-
-### Parallel bitonic
-
-```Dart
-
 ```

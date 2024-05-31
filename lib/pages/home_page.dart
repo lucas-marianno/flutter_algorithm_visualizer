@@ -151,7 +151,7 @@ class _HomePageState extends State<HomePage> {
                         AlgoButton(title: 'Selection Sort', sortingController: sortCtrl),
                         AlgoButton(title: 'Insertion Sort', sortingController: sortCtrl),
                         AlgoButton(title: 'Bitonic Sort', sortingController: sortCtrl),
-                        // AlgoButton(title: 'Bitonic Sort (Parallel)', sortingController: sortCtrl),
+                        AlgoButton(title: 'Bitonic Sort (Parallel)', sortingController: sortCtrl),
                         // mixed
                         AlgoButton(title: 'Shell Sort', sortingController: sortCtrl),
                         // divide and conquer

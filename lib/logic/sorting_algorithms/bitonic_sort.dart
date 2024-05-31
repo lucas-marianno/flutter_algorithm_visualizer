@@ -55,17 +55,16 @@ class BitonicSort extends SortingAlgorithm {
             _removePadding();
             return;
           }
-          await tempHighlight([i, j], _bars);
           registerOperation();
 
           int l = i ^ j;
           if (l > i) {
+            await tempHighlight([i, j], _bars, color: Colors.amber);
             if ((i & k == 0 && _bars[i].value > _bars[l].value) ||
                 (i & k != 0 && _bars[i].value < _bars[l].value)) {
               Bar temp = _bars[i];
               _bars[i] = _bars[l];
               _bars[l] = temp;
-              tempHighlight([i, j], _bars, color: Colors.red);
             }
           }
         }

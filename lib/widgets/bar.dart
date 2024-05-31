@@ -16,7 +16,6 @@ class _BarState extends State<Bar> {
       child: Container(
         color: widget.color ?? Colors.blue,
         height: widget.value.toDouble(),
-        // margin: const EdgeInsets.symmetric(horizontal: 1),
       ),
     );
   }

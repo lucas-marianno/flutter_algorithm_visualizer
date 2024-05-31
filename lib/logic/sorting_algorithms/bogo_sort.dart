@@ -12,7 +12,11 @@ class BogoSort extends SortingAlgorithm {
   @override
   Future<void> sort(List<Bar> bars) async {
     while (!_isSorted(bars) && !hasStopped()) {
-      await shuffle(bars, updateBarsGraph, registerOperation, hasStopped);
+      await Shuffle(
+        updateBarsGraph: updateBarsGraph,
+        registerOperation: registerOperation,
+        hasStopped: hasStopped,
+      ).sort(bars);
 
       //just in case user sets to instant (avoids overflow)
       await Future.delayed(const Duration(microseconds: 1));

@@ -1,25 +1,16 @@
 import 'dart:math';
+import 'package:algovis/logic/sorting_algorithm.dart';
 import 'package:algovis/widgets/bar.dart';
-import 'package:flutter/material.dart';
 
-Future<void> shuffle(
-  List<Bar> bars,
-  Future<void> Function(List<Bar> newBars) updateBarsGraph,
-  void Function() registerOperation,
-  bool Function() hasStopped,
-) async {
-  Future<void> colorize(List<int> l, {Color? color = Colors.amber}) async {
-    for (int i in l) {
-      bars[i] = Bar(bars[i].value, color: color);
-    }
-    await updateBarsGraph(bars);
-    for (int i in l) {
-      bars[i] = Bar(bars[i].value);
-    }
-    updateBarsGraph(bars);
-  }
+class Shuffle extends SortingAlgorithm {
+  Shuffle({
+    required super.updateBarsGraph,
+    required super.registerOperation,
+    required super.hasStopped,
+  });
 
-  Future<void> slowShuffle() async {
+  @override
+  Future<void> sort(List<Bar> bars) async {
     for (int i = 1; i < bars.length; i++) {
       if (hasStopped()) return;
 
@@ -28,10 +19,8 @@ Future<void> shuffle(
       bars[rnd] = bars[i];
       bars[i] = temp;
 
-      await colorize([i, rnd]);
+      await tempHighlight([i, rnd], bars);
       registerOperation();
     }
   }
-
-  await slowShuffle();
 }

@@ -9,9 +9,11 @@ import 'package:algovis/logic/sorting_algorithms/insertion_sort.dart';
 import 'package:algovis/logic/sorting_algorithms/merge_sort.dart';
 import 'package:algovis/logic/sorting_algorithms/quick_sort.dart';
 import 'package:algovis/logic/sorting_algorithms/radix_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/reverse.dart';
 import 'package:algovis/logic/sorting_algorithms/selection_sort.dart';
 import 'package:algovis/logic/sorting_algorithm.dart';
 import 'package:algovis/logic/sorting_algorithms/shell_sort.dart';
+import 'package:algovis/logic/sorting_algorithms/shuffle.dart';
 import 'package:algovis/widgets/bar.dart';
 
 class Sorter {
@@ -41,6 +43,8 @@ class Sorter {
   late final SortingAlgorithm _gnome;
   late final SortingAlgorithm _bogo;
   late final SortingAlgorithm _parallelBitonic;
+  late final SortingAlgorithm _shuffle;
+  late final SortingAlgorithm _reverse;
 
   _setters() {
     _bubble = BubbleSort(
@@ -108,6 +112,16 @@ class Sorter {
       registerOperation: registerOperation,
       hasStopped: hasStopped,
     );
+    _shuffle = Shuffle(
+      updateBarsGraph: updateBarsGraph,
+      registerOperation: registerOperation,
+      hasStopped: hasStopped,
+    );
+    _reverse = Reverse(
+      updateBarsGraph: updateBarsGraph,
+      registerOperation: registerOperation,
+      hasStopped: hasStopped,
+    );
   }
 
   void init() {
@@ -138,4 +152,7 @@ class Sorter {
 
     await _algorithms[algorithm]!.sort(bars);
   }
+
+  Future<void> shuffle(List<Bar> bars) async => await _shuffle.sort(bars);
+  Future<void> reverse(List<Bar> bars) async => await _reverse.sort(bars);
 }

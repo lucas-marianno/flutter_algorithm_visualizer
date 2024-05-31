@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:algovis/logic/sorter.dart';
-import 'package:algovis/logic/sorting_algorithms/shuffle.dart';
 import 'package:algovis/widgets/bar.dart';
 
 class SortingController {
@@ -18,7 +17,6 @@ class SortingController {
   List<Bar> _bars = [];
   int _nOfOperations = 0;
   int _speed = 3;
-  // String _algo = _algorithms.entries.first.key;
   String _algo = 'bubble sort';
   bool _stopSorting = false;
 
@@ -61,16 +59,15 @@ class SortingController {
   Future<void> startShuffling() async {
     _nOfOperations = 0;
     _stopSorting = !_stopSorting;
-    await shuffle(bars, _render, _incrementOperations, hasStopped);
+    await sorter.shuffle(bars);
     await stopSorting();
   }
 
   Future<void> reverseOrder() async {
-    await _speedBypass(() async {
-      await stopSorting();
-      _bars = _bars.reversed.toList();
-      await _render(_bars);
-    });
+    _nOfOperations = 0;
+    _stopSorting = !_stopSorting;
+    await sorter.reverse(bars);
+    await stopSorting();
   }
 
   /// private
@@ -95,13 +92,6 @@ class SortingController {
       default:
         return;
     }
-  }
-
-  Future<void> _speedBypass(Future<void> Function() function) async {
-    int temp = _speed;
-    _speed = 4;
-    await function();
-    _speed = temp;
   }
 
   Future<void> _populate(int quantity) async {

@@ -4,6 +4,7 @@ import 'package:algovis/widgets/menu_button.dart';
 import 'package:algovis/widgets/custom_slider.dart';
 import 'package:algovis/logic/sorting_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:algovis/util/string_extention.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -66,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(sortCtrl.algorithm),
+                        Text(sortCtrl.algorithm.toTitleCase()),
                         Text('${sortCtrl.barsQuantity} array elements'),
                         Text('${sortCtrl.delayMs}ms delay / loop'),
                         Text('${sortCtrl.nOfOperations} operations'),

@@ -26,6 +26,7 @@ class InsertionSort extends SortingAlgorithm {
         j--;
         registerOperation();
       }
+      registerOperation();
     }
     await updateBarsGraph(bars);
   }

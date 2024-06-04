@@ -1,19 +1,28 @@
 # Bitonic sort
 
-- Bitonic mergesort is a parallel algorithm for sorting. It is also used as a construction method for building a sorting network.
-- This makes it a popular choice for sorting large numbers of elements on an architecture which itself contains a large number of parallel execution units running in lockstep, such as a typical GPU.
+Bitonic sort is a parallel sorting algorithm. It sorts by first converting the list into a specific order called a "bitonic sequence" and then uses comparisons to achieve the final sorted output.
+
+## Usage
+
+- It is also used as a construction method for building a sorting network.
+- It excels in environments where multiple processors can work on the data simultaneously.
+- It is a popular choice for sorting large numbers of elements on an architecture which itself contains a large number of parallel execution units running in lockstep, such as a typical GPU.
 - Bitonic sort only works with arrays where the number of elements are a power of two. To sort arrays whose lengths are not a power of 2 using Bitonic Sort, the array must be padded with a high-value element (like infinity) to the next power of 2. After sorting, you can then remove the padding elements.
 
 ## Time complexity
 
-- O(n log^2 n)
+Worst-case | Best-case
+------- | --------
+O(n log² n) | not applicable
 
-## Brief algorithm description
+## Algorithm description
 
-- The algorithm divides the list into two halves, sorts one half in ascending order and the other half in descending order to create a bitonic sequence. It then merges the sequence by comparing and swapping elements to form a sorted sequence. This process is repeated, dividing the sequence into smaller bitonic sequences and merging them.
-- This implementation uses async to demonstrate parallelization. A true parallel implementation would require the use of isolates, where each isolate runs independently on separate threads or cores.
+1. Bitonic Split: The algorithm divides the list into two halves, sorts one half in ascending order and the other half in descending order to create a bitonic sequence.
+2. Bitonic Merge: The algorithm then merges the sequence by comparing and swapping elements to form a sorted sequence. This process is repeated, dividing the sequence into smaller bitonic sequences and merging them.
 
 ## Implementation in Dart
+
+This implementation uses async to demonstrate parallelization. A true parallel implementation would require the use of [isolates](https://dart.dev/language/isolates), where each isolate runs independently on separate threads or cores.
 
 ### Parallel bitonic (recursion)
 
@@ -48,7 +57,9 @@ Future<void> _bitonicMerge(List<int> list, int low, int count, bool dir) async {
     int k = count ~/ 2;
     for (int i = low; i < low + k; i++) {
       if (dir == (list[i] > list[i + k])) {
-        _swap(list, i, i + k);
+        int temp = list[i];
+        list[i] = list[i + k];
+        list[i + k] = temp;
       }
     }
     await Future.wait([
@@ -56,12 +67,6 @@ Future<void> _bitonicMerge(List<int> list, int low, int count, bool dir) async {
       _bitonicMerge(list, low + k, k, dir),
     ]);
   }
-}
-
-void _swap(List<int> list, int i, int j) {
-  int tempValue = list[i];
-  list[i] = list[j];
-  list[j] = tempValue;
 }
 
 int _nextPowerOf2(int n) {

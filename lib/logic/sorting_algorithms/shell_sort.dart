@@ -33,6 +33,6 @@ class ShellSort extends SortingAlgorithm {
         bars[j] = temp;
       }
     }
-    updateBarsGraph(bars);
+    await updateBarsGraph(bars);
   }
 }

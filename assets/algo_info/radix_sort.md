@@ -1,21 +1,37 @@
-# Radix sort
+# Radix sort (Base 10)
+
+Radix Sort is a non-comparative integer sorting algorithm that processes individual digits of the numbers. It sorts numbers digit by digit, starting from the least significant digit to the most significant digit using a stable sorting algorithm.
+
+## Usage
+
+Radix Sort is ideal for sorting large lists of integers where the range of values is not significantly larger than the number of items.
+
+### Real-world Use Cases
+
+- **Large Datasets**: Efficient for sorting large lists of numbers where the range of the numbers is not significantly larger than the list size.
+- **Database and File Systems**: Useful in scenarios where fixed-length keys are used, such as sorting strings or fixed-length records.
+
+Radix Sort is a powerful algorithm for specific cases where its linear time complexity can outperform more general comparison-based algorithms. Its efficiency depends on the number of digits in the largest number, making it highly suitable for certain types of data.
 
 ## Time complexity
 
-- O(n * k) - n is the number of elements in the list and k is the number of digits in the largest number.
+Worst-case | Best-case
+--- | ---
+O(nk) | O(nk)
 
-## Brief algorithm description
+Where \( n \) is the number of elements and \( k \) is the number of digits in the largest number.
 
-- Non-comparative style algorithm.
+## Algorithm description
+
 - Sor the numbers based on their least significant digit, then the next digit, and so on, until all digits have been processed.
-- Radix sort can be implemented using a stable sorting algorithm (usually counting sort) for each digit position. The stability ensures that the relative order of elements with the same digit value remains unchanged after sorting.
+- Radix sort can be implemented using a stable sorting algorithm (usually counting sort) for each digit position. The stability ensures that the relative order of elements, with the same digit value, remains unchanged after sorting.
 - After processing all digits, the list will be sorted in ascending order
 
 ## Implementations in Dart
 
 ### Bucket sort approach
 
-- This is the version used in this app. Although being less efficient due to the creation of nested lists to handle the buckets (it can be memory-intensive, especially if the list is large and there are many digits to sort by), it is an easier approach to generate the graphics and animations.
+- This is the version used in this app. Although being less efficient due to the creation of many lists to handle the buckets (it can be memory-intensive, especially if the list is large and there are many digits to sort by), it is an easier approach to generate the graphics and animations.
 
 ```Dart
 List<int> radix(List<int> list) {
@@ -64,9 +80,9 @@ List<int> radix(List<int> list) {
 - This uses a fixed-size counting array (of size 10 for decimal digits), which is more memory efficient compared to the bucket approach. The count sort approach involves additional steps such as computing [prefix sums](https://en.wikipedia.org/wiki/Prefix_sum) and rebuilding the list, which can be more complex to implement and understand.
 
 ```Dart
-List<int> radix(List<int> list) {
+void radix(List<int> list) {
   void countSort(int lookAt) {
-    List<int> counts10 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    List<int> counts10 = List.generate(10, (index) => 0);
 
     // count
     for (int n in list) {
@@ -107,7 +123,6 @@ List<int> radix(List<int> list) {
   for (int i = 0; i < max; i++) {
     countSort(i);
   }
-  return list;
 }
 
 ```

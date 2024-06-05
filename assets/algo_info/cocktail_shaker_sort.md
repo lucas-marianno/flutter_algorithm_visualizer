@@ -1,16 +1,22 @@
 # Cocktail Shaker Sort
 
-- Also known as bidirectional bubble sort. The algorithm extends bubble sort by operating in two directions. While it improves on bubble sort by more quickly moving items to the beginning of the list, it provides only marginal performance improvements
+Also known as bidirectional bubble sort. The algorithm extends bubble sort by operating in two directions. While it improves on bubble sort by more quickly moving items to the beginning of the list, it provides only marginal performance improvements
 
 ## Time complexity
 
-- O(n²) - O(n) (when already sorted)
+Worst-case | Best-case
+------- | --------
+O(n²) | O(n) (when the list is already sorted)
 
-## Brief algorithm description
+## Usage
 
-- Initialization: Start at the beginning of the list.
-- Forward Pass: Compare each pair of adjacent elements. If the elements are out of order (the first element is greater than the second), swap them. Continue this process until the end of the list is reached.
-- Backward Pass: After completing the forward pass, move backward through the list.
+Cocktail Shaker Sort is suitable for sorting small arrays or lists where simplicity is preferred over efficiency. It's often used in educational contexts due to its straightforward implementation.
+
+## Algorithm description
+
+- **Initialization**: Start at the beginning of the list.
+- **Forward Pass**: Compare each pair of adjacent elements. If the elements are out of order (the first element is greater than the second), swap them. Continue this process until the end of the list is reached.
+- **Backward Pass**: After completing the forward pass, move backward through the list.
 Compare each pair of adjacent elements. If the elements are out of order, swap them.
 Continue this process until the beginning of the list is reached.
 - Repeat the forward and backward passes until no swaps are needed, indicating that the list is sorted.

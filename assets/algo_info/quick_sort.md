@@ -1,40 +1,63 @@
-# Quick sort
+# Quick Sort
+
+Quick Sort is a highly efficient sorting algorithm that uses a divide-and-conquer approach to sort elements. It works by selecting a 'pivot' element and partitioning the array into two sub-arrays according to whether elements are less than or greater than the pivot. This process is repeated recursively for each sub-array.
+
+## Usage
+
+Quick Sort is commonly used in applications that require efficient sorting and can tolerate O(n²) worst-case performance, which is rare due to average performance being O(n log n). It's widely used in systems where memory space is tight as it is an in-place sort (does not require additional storage).
+
+### Real-world Use Cases
+
+- **Search Algorithms**: Quick Sort is used in search algorithms where quick sorting of elements is needed.
+- **Database Systems**: It is used in database systems for efficient querying and indexing.
+- **General Purpose Sorting**: Due to its average-case efficiency and in-place nature, Quick Sort is often used in various general-purpose sorting tasks in software applications.
 
 ## Time complexity
 
-- O(n²) - O(n log n)
+Worst-case | Best-case
+--- | ---
+O(n²) | O(n log n)
 
-## Brief algorithm description
+Quick Sort can perform poorly in the worst case if the pivot selections are poor (e.g., always the smallest or largest element), leading to unbalanced partitions. However, this can be mitigated by using techniques like random pivot selection or median-of-three.
 
-- Divide and conquer style algorithm.
-- Functions similarly to how merge sort works, but it uses a pivot. Pick a number in the unsorted array to be the pivot, then all the other numbers are compared to it and two new arrays are created, one with smaller than pivot, and another one with larger than pivot. Then each new array is iterated the same way, a new pivot is chosen, two new arrays are created containing numbers smaller and larger than it. Rinse and repeat until all of the arrays are one unit long, which means that the sorting is completed. The main catch of this algorithm is how you choose your pivot point, the most reliable method is to pick three random sample numbers and choose the median number, just to get an idea of what you might find in the array and avoid worst-case scenario.
+## Algorithm description
+
+1. Choose a pivot element from the array.
+2. Partition the array into two sub-arrays:
+   - Elements less than the pivot.
+   - Elements greater than the pivot.
+3. Recursively apply the above steps to the sub-arrays.
+4. Combine the sub-arrays and the pivot to get the sorted array.
 
 ## Implementation in Dart
 
 ```Dart
-List<int> quickSort(List<int> barsList) {
-  if (barsList.isEmpty) return barsList;
-
-  List<int> smaller = [];
-  List<int> equal = [];
-  List<int> larger = [];
-
-  int pivot = barsList[barsList.length ~/ 2];
-
-  while (barsList.isNotEmpty) {
-    if (barsList[0] < pivot) {
-      smaller.add(barsList[0]);
-    } else if (barsList[0] > pivot) {
-      larger.add(barsList[0]);
-    } else {
-      equal.add(barsList[0]);
-    }
-
-    barsList.removeAt(0);
+void quickSort(List<int> list, int left, int right) {
+  if (left < right) {
+    int pivotIndex = _partition(list, left, right);
+    quickSort(list, left, pivotIndex - 1);
+    quickSort(list, pivotIndex + 1, right);
   }
-  smaller = quickSort(smaller);
-  larger = quickSort(larger);
-  barsList.addAll([...smaller, ...equal, ...larger]);
-  return barsList;
+}
+
+int _partition(List<int> list, int left, int right) {
+  int pivot = list[right];
+  int i = left - 1;
+
+  for (int j = left; j < right; j++) {
+    if (list[j] < pivot) {
+      i++;
+      _swap(list, i, j);
+    }
+  }
+
+  _swap(list, i + 1, right);
+  return i + 1;
+}
+
+void _swap(List<int> list, int i, int j) {
+  int temp = list[i];
+  list[i] = list[j];
+  list[j] = temp;
 }
 ```

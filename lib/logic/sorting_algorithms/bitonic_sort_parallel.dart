@@ -14,6 +14,7 @@ class ParallelBitonicSort extends SortingAlgorithm {
     await _addPadding(bars);
     await _bitonicSort(bars, 0, bars.length, true);
     await _removePadding(bars);
+    await updateBarsGraph(bars);
   }
 
   int _nextPowerOf2(int n) {
@@ -34,7 +35,7 @@ class ParallelBitonicSort extends SortingAlgorithm {
     while (toBeRemoved.isNotEmpty) {
       bars.removeAt(toBeRemoved.last);
       toBeRemoved.removeLast();
-      await updateBarsGraph(bars);
+      if (!hasStopped()) await updateBarsGraph(bars);
     }
   }
 
@@ -43,7 +44,7 @@ class ParallelBitonicSort extends SortingAlgorithm {
 
     while (bars.length < nextPow) {
       bars.add(const Bar(10000, color: Colors.grey));
-      await updateBarsGraph(bars);
+      if (!hasStopped()) await updateBarsGraph(bars);
     }
   }
 

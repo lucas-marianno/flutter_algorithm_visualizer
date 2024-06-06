@@ -1,5 +1,6 @@
 import 'package:algovis/pages/algo_info_page.dart';
 import 'package:algovis/widgets/algo_button.dart';
+import 'package:algovis/widgets/bars.dart';
 import 'package:algovis/widgets/menu_button.dart';
 import 'package:algovis/widgets/custom_slider.dart';
 import 'package:algovis/logic/sorting_controller.dart';
@@ -44,15 +45,7 @@ class _HomePageState extends State<HomePage> {
               child: Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      sortCtrl.setBarsMaxHeight = constraints.maxHeight;
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: sortCtrl.bars,
-                      );
-                    },
-                  ),
+                  Bars(sortCtrl: sortCtrl),
                   Positioned(
                     top: 0,
                     right: 0,

@@ -32,7 +32,7 @@ class MySlider extends StatelessWidget {
                 child: Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 13),
+                  style: TextStyle(fontSize: 12, color: Colors.deepPurple[900]),
                 ),
               ),
             ),

@@ -13,7 +13,7 @@ class MyBordedContainer extends StatelessWidget {
       height: height,
       width: width,
       margin: const EdgeInsets.all(5),
-      padding: const EdgeInsets.all(5),
+      padding: EdgeInsets.zero,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
         borderRadius: BorderRadius.circular(10),

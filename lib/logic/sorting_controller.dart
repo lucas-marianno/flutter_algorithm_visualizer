@@ -8,11 +8,12 @@ class SortingController {
   final void Function() stateCallBack;
   final Stopwatch _stopwatch = Stopwatch();
 
-  int _barMaxHeight = 400;
-  static const int _barsMaxQuantity = 500;
+  late final Sorter _sorter;
+
+  static const int _barMaxHeight = 9999;
   static const int _barsInitialQuantity = 100;
+  static const int _barsMaxQuantity = 999;
   static const int _barsMinQuantity = 2;
-  late Sorter sorter;
 
   List<Bar> _bars = [];
   int _nOfOperations = 0;
@@ -22,13 +23,13 @@ class SortingController {
 
   /// public
   Future<void> init() async {
-    sorter = Sorter(
+    _sorter = Sorter(
       updateBarsGraph: _render,
       registerOperation: _incrementOperations,
       hasStopped: hasStopped,
     );
 
-    sorter.init();
+    _sorter.init();
 
     await _populate(_barsInitialQuantity);
   }
@@ -44,7 +45,7 @@ class SortingController {
     _stopwatch.reset();
     _stopwatch.start();
 
-    await sorter.sort(_algo, _bars);
+    await _sorter.sort(_algo, _bars);
 
     _stopwatch.stop();
 
@@ -59,14 +60,14 @@ class SortingController {
   Future<void> startShuffling() async {
     _nOfOperations = 0;
     _stopSorting = !_stopSorting;
-    await sorter.shuffle(bars);
+    await _sorter.shuffle(bars);
     await stopSorting();
   }
 
   Future<void> reverseOrder() async {
     _nOfOperations = 0;
     _stopSorting = !_stopSorting;
-    await sorter.reverse(bars);
+    await _sorter.reverse(bars);
     await stopSorting();
   }
 
@@ -126,6 +127,7 @@ class SortingController {
     return _bars.length.clamp(_barsMinQuantity, _barsMaxQuantity);
   }
 
+  int get barMaxHeight => _barMaxHeight;
   int get barsMaxQuantity => _barsMaxQuantity;
   int get barsMinQuantity => _barsMinQuantity;
 
@@ -172,8 +174,6 @@ class SortingController {
   }
 
   set setBarsQuantity(num newQuantity) => _populate(newQuantity.toInt());
-
-  set setBarsMaxHeight(num maxHeight) => _barMaxHeight = maxHeight.toInt();
 
   set setSpeedFromValue(num newSpeed) {
     _speed = newSpeed.toInt();

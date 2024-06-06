@@ -15,7 +15,11 @@ class MenuButton extends StatelessWidget {
     return MyBordedContainer(
       child: TextButton(
         onPressed: onTap,
-        child: FittedBox(child: Text(title, textAlign: TextAlign.center)),
+        child: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 12),
+        ),
       ),
     );
   }

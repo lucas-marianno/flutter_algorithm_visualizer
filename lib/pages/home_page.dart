@@ -86,64 +86,78 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 5),
                   const Divider(),
                   // menu buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      MySlider(
-                        title: 'Quantity',
-                        label: sortCtrl.barsQuantity.toString(),
-                        value: sortCtrl.barsQuantity,
-                        min: sortCtrl.barsMinQuantity,
-                        max: sortCtrl.barsMaxQuantity,
-                        onChanged: (value) => sortCtrl.setBarsQuantity = value,
-                      ),
-                      MySlider(
-                        title: 'Sorting Speed',
-                        label: sortCtrl.speedLabel,
-                        value: sortCtrl.speedValue,
-                        min: 1,
-                        max: 4,
-                        onChanged: (speed) => sortCtrl.setSpeedFromValue = speed,
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: MenuButton(
-                                title: 'Shuffle',
-                                onTap: sortCtrl.startShuffling,
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              MySlider(
+                                title: 'Quantity',
+                                label: sortCtrl.barsQuantity.toString(),
+                                value: sortCtrl.barsQuantity,
+                                min: sortCtrl.barsMinQuantity,
+                                max: sortCtrl.barsMaxQuantity,
+                                onChanged: (value) => sortCtrl.setBarsQuantity = value,
                               ),
-                            ),
-                            Expanded(
-                              child: MenuButton(
-                                title: 'Reverse',
-                                onTap: sortCtrl.reverseOrder,
+                              MySlider(
+                                title: 'Sorting Speed',
+                                label: sortCtrl.speedLabel,
+                                value: sortCtrl.speedValue,
+                                min: 1,
+                                max: 4,
+                                onChanged: (speed) => sortCtrl.setSpeedFromValue = speed,
+                              )
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Expanded(
+                                      child: MenuButton(
+                                        title: 'Shuffle',
+                                        onTap: sortCtrl.startShuffling,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: MenuButton(
+                                        title: 'Reverse',
+                                        onTap: sortCtrl.reverseOrder,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                              Expanded(
+                                child: MenuButton(
+                                  title: sortCtrl.hasStopped() ? 'Start' : 'Stop',
+                                  onTap: () async {
+                                    sortCtrl.hasStopped()
+                                        ? sortCtrl.startSorting()
+                                        : await sortCtrl.stopSorting();
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: MenuButton(
-                          title: sortCtrl.hasStopped() ? 'Start' : 'Stop',
-                          onTap: () async {
-                            sortCtrl.hasStopped()
-                                ? sortCtrl.startSorting()
-                                : await sortCtrl.stopSorting();
-                          },
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   const Divider(),
                   // algo buttons
                   Expanded(
+                    flex: 3,
                     child: GridView.count(
                       crossAxisCount: 4,
                       children: [

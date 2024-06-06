@@ -23,15 +23,31 @@ class MySlider extends StatelessWidget {
     return Expanded(
       child: MyBordedContainer(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.max,
           children: [
-            Text(title),
-            Slider(
-              label: label,
-              value: value.toDouble(),
-              min: min.toDouble(),
-              max: max.toDouble(),
-              divisions: max - min,
-              onChanged: onChanged,
+            Expanded(
+              child: Center(
+                child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 13),
+                ),
+              ),
+            ),
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Slider(
+                  label: label,
+                  value: value.toDouble(),
+                  min: min.toDouble(),
+                  max: max.toDouble(),
+                  divisions: max - min,
+                  onChanged: onChanged,
+                ),
+              ),
             ),
           ],
         ),

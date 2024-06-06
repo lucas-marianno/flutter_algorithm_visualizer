@@ -21,7 +21,7 @@ class AlgoButton extends StatelessWidget {
         },
         child: Text(
           title,
-          style: TextStyle(color: selected ? Colors.white : null),
+          style: TextStyle(color: selected ? Colors.white : null, fontSize: 12),
           textAlign: TextAlign.center,
         ),
       ),

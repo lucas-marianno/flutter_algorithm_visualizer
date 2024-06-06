@@ -8,7 +8,7 @@ class SortingController {
   final void Function() stateCallBack;
   final Stopwatch _stopwatch = Stopwatch();
 
-  static const int _barHeight = 400;
+  int _barMaxHeight = 400;
   static const int _barsMaxQuantity = 500;
   static const int _barsInitialQuantity = 100;
   static const int _barsMinQuantity = 2;
@@ -103,7 +103,7 @@ class SortingController {
     quantity = max(quantity, _barsMinQuantity);
     _bars.clear();
 
-    double multiplier = _barHeight / quantity;
+    double multiplier = _barMaxHeight / quantity;
 
     for (int i = 1; i <= quantity; i++) {
       _bars.add(Bar((i * multiplier).toInt()));
@@ -123,9 +123,7 @@ class SortingController {
   List<Bar> get bars => _bars;
 
   int get barsQuantity {
-    if (_bars.length < _barsMinQuantity) return _barsMinQuantity;
-    if (_bars.length > _barsMaxQuantity) return _barsMaxQuantity;
-    return _bars.length;
+    return _bars.length.clamp(_barsMinQuantity, _barsMaxQuantity);
   }
 
   int get barsMaxQuantity => _barsMaxQuantity;
@@ -168,12 +166,14 @@ class SortingController {
   int get speedValue => _speed;
 
   /// setters
-  set setBarsQuantity(num newQuantity) => _populate(newQuantity.toInt());
-
   set setAlgorithm(String algo) {
     _algo = algo.toLowerCase();
     stateCallBack();
   }
+
+  set setBarsQuantity(num newQuantity) => _populate(newQuantity.toInt());
+
+  set setBarsMaxHeight(num maxHeight) => _barMaxHeight = maxHeight.toInt();
 
   set setSpeedFromValue(num newSpeed) {
     _speed = newSpeed.toInt();

@@ -44,9 +44,14 @@ class _HomePageState extends State<HomePage> {
               child: Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: sortCtrl.bars,
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      sortCtrl.setBarsMaxHeight = constraints.maxHeight;
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: sortCtrl.bars,
+                      );
+                    },
                   ),
                   Positioned(
                     top: 0,

@@ -16,13 +16,14 @@ class AlgoButton extends StatelessWidget {
     return MyBordedContainer(
       color: selected ? Colors.deepPurple : null,
       child: TextButton(
-        onPressed: () {
-          sortingController.setAlgorithm = title;
-        },
+        onPressed: () => sortingController.setAlgorithm = title,
         child: Text(
           title,
-          style: TextStyle(color: selected ? Colors.white : null),
           textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 12,
+            color: selected ? Colors.white : null,
+          ),
         ),
       ),
     );

@@ -106,8 +106,8 @@ class _HomePageState extends State<HomePage> {
                                 title: 'Sorting Speed',
                                 label: sortCtrl.speedLabel,
                                 value: sortCtrl.speedValue,
-                                min: 1,
-                                max: 4,
+                                min: sortCtrl.minSpeed,
+                                max: sortCtrl.maxSpeed,
                                 onChanged: (speed) => sortCtrl.setSpeedFromValue = speed,
                               )
                             ],

@@ -16,11 +16,11 @@ import 'package:algovis/logic/sorting_algorithms/shell_sort.dart';
 import 'package:algovis/logic/sorting_algorithms/shuffle.dart';
 import 'package:algovis/widgets/bar.dart';
 
-class Sorter {
+class AlgorithmController {
   final Future<void> Function(List<Bar> newBars) updateBarsGraph;
   final void Function() registerOperation;
   final bool Function() hasStopped;
-  Sorter({
+  AlgorithmController({
     required this.updateBarsGraph,
     required this.registerOperation,
     required this.hasStopped,
@@ -146,7 +146,7 @@ class Sorter {
   }
 
   Future<void> sort(String algorithm, List<Bar> bars) async {
-    assert(_hasInitialized, '$Sorter must be initialized before use.');
+    assert(_hasInitialized, '$AlgorithmController must be initialized before use.');
     algorithm = algorithm.toLowerCase();
     if (!_algorithms.containsKey(algorithm)) throw '$algorithm hasn\'t been implemented.';
 

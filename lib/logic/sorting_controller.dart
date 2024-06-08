@@ -1,4 +1,4 @@
-import 'package:algovis/logic/sorter.dart';
+import 'package:algovis/logic/algorithm_controller.dart';
 import 'package:algovis/widgets/bar.dart';
 
 class SortingController {
@@ -6,7 +6,7 @@ class SortingController {
 
   final void Function() stateCallBack;
   final Stopwatch _stopwatch = Stopwatch();
-  late final Sorter _sorter;
+  late final AlgorithmController _sorter;
 
   static const int _barsInitialQuantity = 100;
   static const int _barMaxHeight = 9999;
@@ -24,7 +24,7 @@ class SortingController {
 
   /// public
   Future<void> init() async {
-    _sorter = Sorter(
+    _sorter = AlgorithmController(
       updateBarsGraph: _render,
       registerOperation: _incrementOperations,
       hasStopped: hasStopped,
@@ -105,10 +105,7 @@ class SortingController {
   }
 
   Future<void> _populate(int quantity) async {
-    if (!_stopSorting) {
-      await stopSorting();
-      return;
-    }
+    if (!_stopSorting) await stopSorting();
 
     quantity.clamp(_barsMinQuantity, _barsMaxQuantity);
     _bars.clear();

@@ -109,6 +109,7 @@ class _HomePageState extends State<HomePage> {
                                 min: sortCtrl.minSpeed,
                                 max: sortCtrl.maxSpeed,
                                 onChanged: (speed) => sortCtrl.setSpeedFromValue = speed,
+                                manualInput: false,
                               )
                             ],
                           ),

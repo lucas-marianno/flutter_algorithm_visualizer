@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:algovis/logic/sorter.dart';
 import 'package:algovis/widgets/bar.dart';
 
@@ -7,18 +6,20 @@ class SortingController {
 
   final void Function() stateCallBack;
   final Stopwatch _stopwatch = Stopwatch();
-
   late final Sorter _sorter;
 
-  static const int _barMaxHeight = 9999;
   static const int _barsInitialQuantity = 100;
+  static const int _barMaxHeight = 9999;
   static const int _barsMaxQuantity = 999;
   static const int _barsMinQuantity = 2;
+  static const int _minSpeed = 1;
+  static const int _maxSpeed = 5;
 
+  String _algo = 'bubble sort';
   List<Bar> _bars = [];
   int _nOfOperations = 0;
+  int _sleepCalls = 0;
   int _speed = 3;
-  String _algo = 'bubble sort';
   bool _stopSorting = true;
 
   /// public
@@ -41,6 +42,7 @@ class SortingController {
 
     _nOfOperations = 0;
     _stopSorting = false;
+    _sleepCalls = 0;
 
     _stopwatch.reset();
     _stopwatch.start();
@@ -50,6 +52,7 @@ class SortingController {
     _stopwatch.stop();
 
     await stopSorting();
+    stateCallBack();
   }
 
   Future<void> stopSorting() async {
@@ -62,6 +65,7 @@ class SortingController {
     _stopSorting = !_stopSorting;
     await _sorter.shuffle(bars);
     await stopSorting();
+    stateCallBack();
   }
 
   Future<void> reverseOrder() async {
@@ -69,6 +73,7 @@ class SortingController {
     _stopSorting = !_stopSorting;
     await _sorter.reverse(bars);
     await stopSorting();
+    stateCallBack();
   }
 
   /// private
@@ -80,19 +85,23 @@ class SortingController {
     switch (_speed) {
       case 1:
         await Future.delayed(const Duration(milliseconds: 1000));
-        return;
+        break;
       case 2:
         await Future.delayed(const Duration(milliseconds: 100));
-        return;
+        break;
       case 3:
         await Future.delayed(const Duration(milliseconds: 1));
-        return;
+        break;
       case 4:
+        if (_sleepCalls % 10 == 0) await Future.delayed(const Duration(milliseconds: 1));
+        break;
+      case 5:
         // instant
-        return;
+        break;
       default:
-        return;
+        break;
     }
+    _sleepCalls++;
   }
 
   Future<void> _populate(int quantity) async {
@@ -101,7 +110,7 @@ class SortingController {
       return;
     }
 
-    quantity = max(quantity, _barsMinQuantity);
+    quantity.clamp(_barsMinQuantity, _barsMaxQuantity);
     _bars.clear();
 
     double multiplier = _barMaxHeight / quantity;
@@ -113,7 +122,8 @@ class SortingController {
   }
 
   Future<void> _render(List<Bar> newBar) async {
-    _bars = [...newBar];
+    _bars = newBar;
+    if (_speed == 5 && _algo != 'bogo sort') return;
     stateCallBack();
     await _sleep();
   }
@@ -131,7 +141,7 @@ class SortingController {
   int get barsMaxQuantity => _barsMaxQuantity;
   int get barsMinQuantity => _barsMinQuantity;
 
-  int get delayMs {
+  double get delayMs {
     switch (_speed) {
       case 1:
         return 1000;
@@ -140,6 +150,8 @@ class SortingController {
       case 3:
         return 1;
       case 4:
+        return 0.1;
+      case 5:
         return 0;
       default:
         return 9999999999;
@@ -147,6 +159,9 @@ class SortingController {
   }
 
   Duration get elapsedTime => _stopwatch.elapsed;
+
+  int get minSpeed => _minSpeed;
+  int get maxSpeed => _maxSpeed;
 
   int get nOfOperations => _nOfOperations;
 
@@ -157,8 +172,10 @@ class SortingController {
       case 2:
         return 'slow';
       case 3:
-        return 'fast';
+        return 'normal';
       case 4:
+        return 'fast';
+      case 5:
         return 'instant';
       default:
         return '';

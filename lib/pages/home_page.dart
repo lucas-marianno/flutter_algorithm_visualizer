@@ -85,12 +85,13 @@ class _HomePageState extends State<HomePage> {
                   const Divider(),
                   // menu buttons
                   Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Expanded(
+                          flex: 2,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -156,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                   const Divider(),
                   // algo buttons
                   Expanded(
-                    flex: 3,
+                    flex: 2,
                     child: GridView.count(
                       crossAxisCount: 4,
                       children: [
